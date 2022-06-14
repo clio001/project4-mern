@@ -16,7 +16,8 @@ export default function ViewLanding() {
         <Typography variant="h1" m={4}>
           Landing page
         </Typography>
-        <Typography variant="h4">Project 4: M.E.R.N.</Typography>
+        <Typography variant="subtitle1">Project 4: M.E.R.N.</Typography>
+        <Typography variant="body1"></Typography>
       </Box>
     </>
   );

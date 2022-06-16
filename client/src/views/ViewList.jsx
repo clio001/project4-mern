@@ -5,31 +5,21 @@ import {
   TextField,
   Button,
   Select,
+  FormControl,
+  InputLabel,
+  MenuItem,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import { useContext } from "react";
 import FaceSharpIcon from "@mui/icons-material/FaceSharp";
+import { FetchContext } from "../context/FetchContext";
+import Navbar from "../components/Navbar";
 
 export default function ViewList() {
-  const [myData, setMyData] = useState(null);
-  URL = "http://192.168.2.124:5001/users/data";
-
-  const getData = () => {
-    fetch(URL).then((response) =>
-      response.json().then((myData) => {
-        console.log("First fetch: ", myData);
-        setMyData(myData);
-      })
-    );
-  };
-
-  useEffect(() => {
-    getData(URL);
-  }, []);
+  const { myData } = useContext(FetchContext);
 
   return (
     <>
-      {" "}
+      <Navbar />
       <Box
         style={{
           display: "flex",
@@ -96,8 +86,22 @@ export default function ViewList() {
               label="Password"
               style={{ margin: "0.5rem" }}
             />
+            <FormControl variant="standard" style={{ margin: "0.5rem" }}>
+              <InputLabel>Role</InputLabel>
+              <Select label="Role" defaultValue="">
+                <MenuItem value="admin">Admin</MenuItem>
+                <MenuItem value="moderator">Moderator</MenuItem>
+                <MenuItem value="contributor">Contributor</MenuItem>
+              </Select>
+            </FormControl>
 
-            <Button type="submit">Submit</Button>
+            <Button
+              type="submit"
+              variant="contained"
+              style={{ margin: "1rem" }}
+            >
+              Submit
+            </Button>
           </Paper>
         </Box>
         <Box>

@@ -19,6 +19,9 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  /*   imgPath: {
+    type: String,
+  }, */
   role: {
     type: String,
     required: true,

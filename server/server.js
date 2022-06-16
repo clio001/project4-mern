@@ -1,13 +1,16 @@
 import express from "express";
 import cors from "cors";
 import usersRoute from "./routes/usersRoute.js";
+import articlesRoute from "./routes/articlesRoute.js";
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
+import { findAllArticles } from "./controller/articlesController.js";
 
 // * loading .env file
 dotenv.config();
 
 const app = express();
+/* console.log("App ", app); */
 const PORT = process.env.PORT || 5001;
 
 const runServer = () => {
@@ -18,6 +21,11 @@ const runServer = () => {
 
 const loadRoutes = () => {
   app.use("/users", usersRoute);
+  app.use("/articles", articlesRoute);
+
+  /*     app.use("/teams") TEAMS
+    app.use("/projects") PROJECTS
+    app.use("/objects") OBJECTS */
 };
 
 const addMiddleware = () => {

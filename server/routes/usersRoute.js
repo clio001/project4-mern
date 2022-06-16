@@ -1,5 +1,9 @@
 import express from "express";
-import { findAllUsers } from "../controller/usersController.js";
+import {
+  findAllUsers,
+  findUsersByRole,
+  queryUsersByRole,
+} from "../controller/usersController.js";
 // import User from "../models/userModel.js";
 
 const router = express.Router();
@@ -11,5 +15,8 @@ router.get("/test", (request, response) => {
 
 // * FIND ALL USERS endpoint
 router.get("/data", findAllUsers);
+
+// * FIND USERS by role
+router.get("/:role", queryUsersByRole);
 
 export default router;

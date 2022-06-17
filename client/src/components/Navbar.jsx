@@ -10,6 +10,7 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
+  Divider,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -36,19 +37,38 @@ export default function Navbar() {
           onClose={handleShow}
         >
           <Box style={{ textAlign: "end", width: "20rem" }}>
-            <IconButton>
-              <CloseIcon onClick={handleShow} />
+            <IconButton onClick={handleShow}>
+              <CloseIcon />
             </IconButton>
           </Box>
           <Typography variant="h6" m={2}>
             Menu
           </Typography>
-          <Link to="list">
+          <Divider style={{ marginBottom: "0.5rem" }} />
+          <Link to="/list">
             <MenuItem>
               <ListItemIcon>
                 <CloseIcon />
               </ListItemIcon>
-              <ListItemText style={{ color: "grey" }}>List view</ListItemText>
+              <ListItemText style={{ color: "grey" }}>All Members</ListItemText>
+            </MenuItem>
+          </Link>
+          <Link to="/registration">
+            <MenuItem>
+              <ListItemIcon>
+                <CloseIcon />
+              </ListItemIcon>
+              <ListItemText style={{ color: "grey" }}>
+                Registration
+              </ListItemText>
+            </MenuItem>
+          </Link>
+          <Link to="/dashboard">
+            <MenuItem>
+              <ListItemIcon>
+                <CloseIcon />
+              </ListItemIcon>
+              <ListItemText style={{ color: "grey" }}>Dashboard</ListItemText>
             </MenuItem>
           </Link>
         </Drawer>

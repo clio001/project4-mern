@@ -4,12 +4,12 @@ export const FetchContext = createContext();
 
 export const FetchContextProvider = (props) => {
   const [myData, setMyData] = useState(null);
-  URL = "http://192.168.2.124:5001/users/data";
+  const URL = "http://192.168.2.124:5001/users/all";
 
   const getData = () => {
     fetch(URL).then((response) =>
       response.json().then((myData) => {
-        console.log("First fetch: ", myData);
+        /* console.log("First fetch: ", myData); */
         setMyData(myData);
       })
     );

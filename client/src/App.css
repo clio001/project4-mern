@@ -14,3 +14,19 @@ a {
   text-decoration: none;
   color: white;
 }
+
+/** DASHBOARD **/
+
+.dashboard-box-container {
+  border: solid 2px lightskyblue;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  width: 35%;
+  margin: 0.5rem;
+}
+
+.team-box-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}

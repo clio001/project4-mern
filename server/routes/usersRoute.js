@@ -1,6 +1,7 @@
 import express from "express";
 import {
   findAllUsers,
+  findUserByName,
   findUsersByRole,
   queryUsersByRole,
 } from "../controller/usersController.js";
@@ -14,7 +15,7 @@ router.get("/test", (request, response) => {
 });
 
 // * FIND ALL USERS endpoint
-router.get("/data", findAllUsers);
+router.get("/all", findAllUsers);
 
 // * FIND USERS by role
 router.get("/:role", queryUsersByRole);

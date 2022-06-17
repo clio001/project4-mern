@@ -1,9 +1,12 @@
 import express from "express";
 import cors from "cors";
-import usersRoute from "./routes/usersRoute.js";
-import articlesRoute from "./routes/articlesRoute.js";
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
+
+// * Importing routes
+import usersRoute from "./routes/usersRoute.js";
+import articlesRoute from "./routes/articlesRoute.js";
+import projectsRoute from "./routes/projectsRoute.js";
 import { findAllArticles } from "./controller/articlesController.js";
 
 // * loading .env file
@@ -21,10 +24,11 @@ const runServer = () => {
 
 const loadRoutes = () => {
   app.use("/users", usersRoute);
+  app.use("/projects", projectsRoute);
   app.use("/articles", articlesRoute);
 
-  /*     app.use("/teams") TEAMS
-    app.use("/projects") PROJECTS
+  // app.use("/teams");
+  /*     app.use("/projects") PROJECTS
     app.use("/objects") OBJECTS */
 };
 

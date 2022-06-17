@@ -18,7 +18,7 @@ export default function ViewList() {
   const { myData } = useContext(FetchContext);
 
   return (
-    <>
+    <div id="home-screen">
       <Navbar />
       <Box
         style={{
@@ -45,65 +45,6 @@ export default function ViewList() {
           marginTop: "3rem",
         }}
       >
-        <Box id="form">
-          {" "}
-          <Paper
-            variant="elevation"
-            elevation={3}
-            style={{
-              padding: "0.5rem",
-              display: "flex",
-              flexDirection: "column",
-              width: "16rem",
-              marginLeft: "2rem",
-            }}
-          >
-            <Typography variant="h5" m={1}>
-              New user
-            </Typography>
-            <TextField
-              variant="standard"
-              required
-              label="First name"
-              style={{ margin: "0.5rem" }}
-            />
-
-            <TextField
-              variant="standard"
-              required
-              label="Last name"
-              style={{ margin: "0.5rem" }}
-            />
-            <TextField
-              variant="standard"
-              required
-              label="E-Mail"
-              style={{ margin: "0.5rem" }}
-            />
-            <TextField
-              variant="standard"
-              required
-              label="Password"
-              style={{ margin: "0.5rem" }}
-            />
-            <FormControl variant="standard" style={{ margin: "0.5rem" }}>
-              <InputLabel>Role</InputLabel>
-              <Select label="Role" defaultValue="">
-                <MenuItem value="admin">Admin</MenuItem>
-                <MenuItem value="moderator">Moderator</MenuItem>
-                <MenuItem value="contributor">Contributor</MenuItem>
-              </Select>
-            </FormControl>
-
-            <Button
-              type="submit"
-              variant="contained"
-              style={{ margin: "1rem" }}
-            >
-              Submit
-            </Button>
-          </Paper>
-        </Box>
         <Box>
           {" "}
           <Box
@@ -154,6 +95,6 @@ export default function ViewList() {
           </Box>
         </Box>
       </Box>
-    </>
+    </div>
   );
 }

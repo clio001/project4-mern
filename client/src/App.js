@@ -9,16 +9,23 @@ import ViewList from "./views/ViewList";
 
 // * Import contexts
 import { FetchContextProvider } from "./context/FetchContext";
+import ViewRegistration from "./views/ViewRegistration";
+import ViewDashboard from "./views/ViewDashboard";
+import { ProjectFetchContextProvider } from "./context/ProjectFetchContext";
 
 function App() {
   return (
     <Router>
-      <FetchContextProvider>
-        <Routes>
-          <Route path="/" element={<ViewLanding />} />
-          <Route path="list" element={<ViewList />} />
-        </Routes>
-      </FetchContextProvider>
+      <ProjectFetchContextProvider>
+        <FetchContextProvider>
+          <Routes>
+            <Route path="/" element={<ViewLanding />} />
+            <Route path="list" element={<ViewList />} />
+            <Route path="registration" element={<ViewRegistration />} />{" "}
+            <Route path="dashboard" element={<ViewDashboard />} />
+          </Routes>
+        </FetchContextProvider>
+      </ProjectFetchContextProvider>
     </Router>
   );
 }

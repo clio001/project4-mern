@@ -1,5 +1,6 @@
 import React from "react";
 import { Typography, Box, Button, TextField } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -30,10 +31,11 @@ export default function Home() {
           <Typography variant="h5" style={{ color: "#eeeeee" }}>
             A platform for collaborative research
           </Typography>
-
-          <Button variant="contained" style={{ marginTop: "2rem" }}>
-            Sign up
-          </Button>
+          <Link to="/registration">
+            <Button variant="contained" style={{ marginTop: "2rem" }}>
+              Sign up
+            </Button>
+          </Link>
         </Box>
         {/* Login Interface */}
         <Box
@@ -70,9 +72,13 @@ export default function Home() {
               required
               style={{ marginTop: "0.5rem" }}
             />
-            <Button variant="contained" style={{ marginTop: "1.5rem" }}>
-              Login
-            </Button>
+            <Box style={{ textAlign: "center" }}>
+              <Link to="/dashboard">
+                <Button variant="contained" style={{ marginTop: "1.5rem" }}>
+                  Login
+                </Button>
+              </Link>
+            </Box>
           </Box>
         </Box>
       </Box>

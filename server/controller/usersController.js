@@ -15,6 +15,24 @@ const findAllUsers = async (request, response) => {
   }
 };
 
+// * Function to populate specific user with project data
+const findUserByName = async (request, response) => {
+  try {
+    const user = await User.findOne({ firstName: "Juano" })
+      .populate({
+        path: "project",
+        select: ["name"],
+      })
+      .exec();
+    response.status(200).json(user);
+  } catch (error) {
+    response.status(400).json({
+      error: error,
+      message: "Unable to find user by name and populate with project data.",
+    });
+  }
+};
+
 // * Function to retrieve all users by role
 const findUsersByRole = async (request, response) => {
   try {
@@ -48,4 +66,4 @@ const queryUsersByRole = async (request, response) => {
   }
 };
 
-export { findAllUsers, findUsersByRole, queryUsersByRole };
+export { findAllUsers, findUsersByRole, queryUsersByRole, findUserByName };

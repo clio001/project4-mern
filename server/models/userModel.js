@@ -10,6 +10,9 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  organization: {
+    type: String,
+  },
   email: {
     type: String,
     required: true,
@@ -22,14 +25,18 @@ const userSchema = new Schema({
   /*   imgPath: {
     type: String,
   }, */
+  project: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Project",
+    },
+  ],
+
   role: {
     type: String,
     required: true,
   },
   createdAt: {
-    type: Date,
-  },
-  lastUpdatedAt: {
     type: Date,
   },
 });

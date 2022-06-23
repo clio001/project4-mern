@@ -33,6 +33,8 @@ const loadRoutes = () => {
 };
 
 const addMiddleware = () => {
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
   const corsOptions = {
     origin: "http://localhost:3000", // or '*'
     credentials: true,
@@ -43,7 +45,7 @@ const addMiddleware = () => {
 const connectToMongoDB = async () => {
   try {
     await mongoose.connect(process.env.DB);
-    console.log("Connection to White Lake database established.");
+    console.log("Connection to MongoDB established.");
   } catch (error) {
     console.log("Error trying to connect with MongoDB.", error);
   }

@@ -1,4 +1,7 @@
 import User from "../models/userModel.js";
+import encryptPassword from "../utils/encryptedPassword.js";
+import { verifyPassword } from "../utils/encryptedPassword.js";
+import { issueToken } from "../utils/jwt.js";
 
 // * Function to retrieve all users
 const findAllUsers = async (request, response) => {
@@ -66,4 +69,100 @@ const queryUsersByRole = async (request, response) => {
   }
 };
 
-export { findAllUsers, findUsersByRole, queryUsersByRole, findUserByName };
+// * Function to sign up new users
+const signUp = async (request, response) => {
+  try {
+    console.log("request.body", request.body);
+    // * Check if user already exists
+
+    const existingUser = await User.findOne({ email: request.body.email });
+    if (existingUser) {
+      response.status(409).json({ message: "User already exists." });
+    } else {
+      // * Pass user password into encryption and assign encrypted password to variable "hashedPassword"
+      const hashedPassword = await encryptPassword(request.body.password);
+      console.log("hashed password", hashedPassword);
+
+      // * Create new user object
+      const newUser = new User({
+        firstName: request.body.firstName,
+        lastName: request.body.lastName,
+        email: request.body.email,
+        organization: request.body.organization,
+        password: hashedPassword,
+        role: request.body.role,
+        project: request.body.project,
+        createdAt: new Date(),
+      });
+      console.log("New user created.");
+
+      // * Save new user object by using the Mongoose .save()
+      try {
+        const savedUser = await newUser.save();
+        response.status(201).json({
+          user: {
+            firstName: savedUser.firstName,
+            lastName: savedUser.lastName,
+            email: savedUser.email,
+            organization: savedUser.organization,
+            role: savedUser.role,
+            project: savedUser.project,
+            createdAt: savedUser.createdAt,
+          },
+          message: "User saved in MongoDB!",
+        });
+      } catch (error) {
+        response
+          .status(409)
+          .json({ message: "Error saving new user.", error: error });
+      }
+    }
+  } catch (error) {
+    response.json({
+      message: "ERROR: User could not be signed up.",
+      error: error,
+    });
+  }
+};
+
+// * LOGIN
+
+const logIn = async (request, response) => {
+  const existingUser = await User.findOne({ email: request.body.email });
+  if (!existingUser) {
+    response
+      .status(401)
+      .json({ message: "ERROR: User does not exist. Please register first." });
+  } else {
+    const verified = await verifyPassword(
+      request.body.password,
+      existingUser.password
+    );
+    console.log("Hashed password from MongoDB: ", existingUser.password);
+    console.log("Plaintext password from user: ", request.body.password);
+    if (!verified) {
+      response.status(401).json({ message: "ERROR: Password incorrect." });
+    } else {
+      const token = issueToken(existingUser.id);
+      response.status(200).json({
+        message: "SUCCESS: User password verified.",
+        user: {
+          firstName: existingUser.firstName,
+          lastName: existingUser.lastName,
+          email: existingUser.email,
+          _id: existingUser.id,
+        },
+      });
+      console.log("SUCCESS: User password verified.", verified);
+    }
+  }
+};
+
+export {
+  findAllUsers,
+  findUsersByRole,
+  queryUsersByRole,
+  findUserByName,
+  signUp,
+  logIn,
+};

@@ -9,9 +9,9 @@ const projectSchema = new Schema({
   description: {
     type: String,
   },
-  users: {
+  /*   users: {
     type: String,
-  },
+  }, */
   organization: {
     type: String,
   },

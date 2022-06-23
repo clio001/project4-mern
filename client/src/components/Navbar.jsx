@@ -14,6 +14,11 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import GroupIcon from "@mui/icons-material/Group";
+import HelpIcon from "@mui/icons-material/Help";
+import InfoIcon from "@mui/icons-material/Info";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
@@ -44,37 +49,57 @@ export default function Navbar() {
           <Typography variant="h6" m={2}>
             Menu
           </Typography>
-          <Divider style={{ marginBottom: "0.5rem" }} />
-          <Link to="/list">
+          <Divider style={{ marginBottom: "0.5rem" }} />{" "}
+          <Link to="/dashboard">
+            <Link to="/dashboard">
+              <MenuItem>
+                <ListItemIcon>
+                  <InfoIcon />
+                </ListItemIcon>
+                <ListItemText style={{ color: "grey" }}>About</ListItemText>
+              </MenuItem>
+            </Link>
             <MenuItem>
               <ListItemIcon>
-                <CloseIcon />
+                <DashboardIcon />
               </ListItemIcon>
-              <ListItemText style={{ color: "grey" }}>All Members</ListItemText>
+              <ListItemText style={{ color: "grey" }}>Dashboard</ListItemText>
             </MenuItem>
           </Link>
           <Link to="/registration">
             <MenuItem>
               <ListItemIcon>
-                <CloseIcon />
+                <AccountCircleIcon />
               </ListItemIcon>
               <ListItemText style={{ color: "grey" }}>
                 Registration
               </ListItemText>
             </MenuItem>
           </Link>
+          <Link to="/list">
+            <MenuItem>
+              <ListItemIcon>
+                <GroupIcon />
+              </ListItemIcon>
+              <ListItemText style={{ color: "grey" }}>All Members</ListItemText>
+            </MenuItem>
+          </Link>
           <Link to="/dashboard">
             <MenuItem>
               <ListItemIcon>
-                <CloseIcon />
+                <HelpIcon />
               </ListItemIcon>
-              <ListItemText style={{ color: "grey" }}>Dashboard</ListItemText>
+              <ListItemText style={{ color: "grey" }}>Help</ListItemText>
             </MenuItem>
           </Link>
         </Drawer>
       </div>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="sticky" color="primary" elevation={8}>
+        <AppBar
+          position="sticky"
+          elevation={8}
+          style={{ backgroundColor: "#489a8e" }}
+        >
           <Toolbar>
             <Grid container style={{ alignItems: "center" }}>
               <Grid item xs={4}>
@@ -96,7 +121,9 @@ export default function Navbar() {
                     <span style={{ fontFamily: "Courier", color: "black" }}>
                       Doc
                     </span>
-                    <span style={{ fontSize: "1.8rem" }}>Hub</span>
+                    <span style={{ fontSize: "1.8rem", color: "white" }}>
+                      Hub
+                    </span>
                   </Typography>
                 </Link>
               </Grid>

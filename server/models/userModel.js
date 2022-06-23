@@ -25,12 +25,12 @@ const userSchema = new Schema({
   /*   imgPath: {
     type: String,
   }, */
-  project: [
+  /*   project: [
     {
       type: Schema.Types.ObjectId,
       ref: "Project",
-    },
-  ],
+    }, 
+  ],*/
 
   role: {
     type: String,

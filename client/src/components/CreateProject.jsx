@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Paper,
@@ -9,13 +10,12 @@ import {
   Select,
   MenuItem,
   Button,
-  Alert,
   Collapse,
+  Alert,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
-export default function Registration() {
-  const [newUser, setNewUser] = useState({});
+function CreateProject() {
+  const [newProject, setNewProject] = useState({});
   const [signUpAlert, setSignUpAlert] = useState(false);
   const navigate = useNavigate();
 
@@ -25,42 +25,40 @@ export default function Registration() {
   }
 
   const handleFormChange = (event) => {
-    setNewUser({ ...newUser, [event.target.name]: event.target.value });
+    setNewProject({ ...newProject, [event.target.name]: event.target.value });
   };
 
-  // * Create frontend sign-up function to send user input to backend
-  const signUpUser = async () => {
-    // TODO: include checks that all fields are completed and code requirements met.
+  // * Create frontend function to submit form data to insert new project into database
 
+  const submitForm = async () => {
     let urlencoded = new URLSearchParams();
-    urlencoded.append("firstName", newUser.firstName);
-    urlencoded.append("lastName", newUser.lastName);
-    urlencoded.append("email", newUser.email);
-    urlencoded.append("password", newUser.password);
-    urlencoded.append("organization", newUser.organization);
-    urlencoded.append("project", newUser.project);
-    urlencoded.append("role", newUser.role);
-    urlencoded.append("createdAt", newUser.createdAt);
+    urlencoded.append("name", newProject.name);
+    urlencoded.append("description", newProject.description);
+    urlencoded.append("organization", newProject.organization);
+    urlencoded.append("email", newProject.email);
+    urlencoded.append("website", newProject.website);
 
-    // * Defining the method and format for the post request
+    // * Define request options as a post request and that the form data is submitted in the body of the request
+
     var requestOptions = {
       method: "POST",
       body: urlencoded,
     };
 
-    // * Fetch function to post the new user object collected from the frontend form to the database via the endpoint
+    // * Fetch function to post form data from the frontend to the database via the endpoint
+
     try {
       const response = await fetch(
-        "http://localhost:5001/users/signup",
+        "http://localhost:5001/projects/newproject",
         requestOptions
       );
       const results = await response.json();
       setSignUpAlert(true);
-      setTimeout(closeBanner, 3000);
-      console.log("Results: ", results);
+      setTimeout(closeBanner, 2000);
+      console.log("New project created: ", results);
     } catch (error) {
       setSignUpAlert(false);
-      console.log("Failed to transmit user data to backend.", error);
+      console.log("Failed to transmit new project data to backend");
     }
   };
 
@@ -68,10 +66,9 @@ export default function Registration() {
     <div id="home-screen">
       <Collapse in={signUpAlert}>
         <Alert severity="success">
-          {newUser.firstName} {newUser.lastName} successfully signed up!
+          New project "{newProject.name}" created!
         </Alert>{" "}
       </Collapse>
-
       <Box
         id="form"
         style={{
@@ -96,13 +93,13 @@ export default function Registration() {
           <Box>
             <Box>
               <Typography variant="h5" m={1}>
-                New user
+                Create a new project
               </Typography>
               <TextField
                 variant="standard"
                 required
-                name="firstName"
-                label="First name"
+                name="name"
+                label="Name"
                 onChange={handleFormChange}
                 style={{ margin: "0.5rem" }}
               />
@@ -110,25 +107,8 @@ export default function Registration() {
               <TextField
                 variant="standard"
                 required
-                name="lastName"
-                label="Last name"
-                onChange={handleFormChange}
-                style={{ margin: "0.5rem" }}
-              />
-              <TextField
-                variant="standard"
-                required
                 name="email"
                 label="E-Mail"
-                onChange={handleFormChange}
-                style={{ margin: "0.5rem" }}
-              />
-              <TextField
-                variant="standard"
-                type="password"
-                required
-                name="password"
-                label="Password"
                 onChange={handleFormChange}
                 style={{ margin: "0.5rem" }}
               />
@@ -148,40 +128,21 @@ export default function Registration() {
                 onChange={handleFormChange}
                 style={{ margin: "0.5rem" }}
               />
-              <FormControl
+              <TextField
                 variant="standard"
-                style={{ margin: "0.5rem" }}
                 required
-              >
-                <InputLabel>Project</InputLabel>
-                <Select
-                  label="Project"
-                  name="project"
-                  onChange={handleFormChange}
-                  defaultValue=""
-                  style={{ width: "165px" }}
-                >
-                  <MenuItem value="62ac5335d3749757becff764">
-                    Estudios Espanoles
-                  </MenuItem>
-                  <MenuItem value="Climate Governance">
-                    Climate Governance
-                  </MenuItem>
-                  <MenuItem value="Receta del tamal">
-                    La receta del tamal
-                  </MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl
-                variant="standard"
+                name="website"
+                label="Website"
+                onChange={handleFormChange}
                 style={{ margin: "0.5rem" }}
-                required
-              >
-                <InputLabel>Role</InputLabel>
+              />
+              <FormControl variant="standard" style={{ margin: "0.5rem" }}>
+                <InputLabel>Members</InputLabel>
                 <Select
-                  label="Role"
-                  name="role"
+                  label="Members"
+                  name="users"
                   defaultValue=""
+                  disabled
                   style={{ width: "165px" }}
                   onChange={handleFormChange}
                 >
@@ -190,12 +151,20 @@ export default function Registration() {
                   <MenuItem value="contributor">Contributor</MenuItem>
                 </Select>
               </FormControl>
+              <TextField
+                variant="standard"
+                required
+                name="description"
+                label="Description"
+                onChange={handleFormChange}
+                style={{ margin: "0.5rem" }}
+              />
             </Box>
 
             <Button
               type="submit"
               variant="contained"
-              onClick={signUpUser}
+              onClick={submitForm}
               style={{ margin: "1rem", backgroundColor: "#489a8e" }}
             >
               Submit
@@ -206,3 +175,5 @@ export default function Registration() {
     </div>
   );
 }
+
+export default CreateProject;

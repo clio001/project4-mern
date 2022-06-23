@@ -86,6 +86,9 @@ export default function ViewList() {
                         {user.email}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
+                        {user.organization}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
                         {user.role}
                       </Typography>
                     </Box>

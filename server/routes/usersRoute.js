@@ -4,6 +4,8 @@ import {
   findUserByName,
   findUsersByRole,
   queryUsersByRole,
+  signUp,
+  logIn,
 } from "../controller/usersController.js";
 // import User from "../models/userModel.js";
 
@@ -19,5 +21,12 @@ router.get("/all", findAllUsers);
 
 // * FIND USERS by role
 router.get("/:role", queryUsersByRole);
+
+// * SIGNUP route for new users
+router.post("/signup", signUp);
+
+// * LOGIN route
+
+router.post("/login", logIn);
 
 export default router;

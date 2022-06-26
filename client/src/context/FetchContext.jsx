@@ -4,7 +4,7 @@ export const FetchContext = createContext();
 
 export const FetchContextProvider = (props) => {
   const [myData, setMyData] = useState(null);
-  const URL = "http://192.168.0.152:5001/users/all";
+  const URL = "http://localhost:5001/users/all";
 
   const getData = () => {
     fetch(URL).then((response) =>

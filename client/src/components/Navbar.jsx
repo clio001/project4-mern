@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Typography,
@@ -13,6 +13,7 @@ import {
   Divider,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import LogoutIcon from "@mui/icons-material/Logout";
 import CloseIcon from "@mui/icons-material/Close";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -20,9 +21,11 @@ import GroupIcon from "@mui/icons-material/Group";
 import HelpIcon from "@mui/icons-material/Help";
 import InfoIcon from "@mui/icons-material/Info";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Navbar() {
   const [show, setShow] = useState(false);
+  const { userStatus, logOut } = useContext(AuthContext);
 
   const handleShow = () => {
     if (show) {
@@ -94,15 +97,15 @@ export default function Navbar() {
           </Link>
         </Drawer>
       </div>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box>
         <AppBar
           position="sticky"
           elevation={8}
           style={{ backgroundColor: "#489a8e" }}
         >
           <Toolbar>
-            <Grid container style={{ alignItems: "center" }}>
-              <Grid item xs={4}>
+            <Grid container>
+              <Grid item xs={4} sx={{ flexGrow: 1 }}>
                 {" "}
                 <IconButton
                   size="large"
@@ -115,7 +118,12 @@ export default function Navbar() {
                   <MenuIcon />
                 </IconButton>
               </Grid>
-              <Grid item xs={4} style={{ textAlign: "center" }}>
+              <Grid
+                item
+                xs={4}
+                style={{ textAlign: "center" }}
+                sx={{ flexGrow: 1 }}
+              >
                 <Link to="/">
                   <Typography variant="h4" component="div" mr={2}>
                     <span style={{ fontFamily: "Courier", color: "black" }}>
@@ -127,6 +135,35 @@ export default function Navbar() {
                   </Typography>
                 </Link>
               </Grid>
+              {userStatus ? (
+                <Grid item xs={4} style={{ textAlign: "end" }}>
+                  {" "}
+                  <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    sx={{ mr: 2 }}
+                    onClick={logOut}
+                  >
+                    <LogoutIcon />
+                  </IconButton>
+                </Grid>
+              ) : (
+                <Grid item xs={4} style={{ textAlign: "end" }}>
+                  {" "}
+                  <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    sx={{ mr: 2 }}
+                    onClick={handleShow}
+                  >
+                    <AccountCircleIcon />
+                  </IconButton>
+                </Grid>
+              )}
             </Grid>
           </Toolbar>
         </AppBar>

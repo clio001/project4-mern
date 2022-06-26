@@ -4,7 +4,7 @@ export const ProjectFetchContext = createContext();
 
 export const ProjectFetchContextProvider = (props) => {
   const [projectData, setProjectData] = useState(null);
-  const URL = "http://192.168.0.152:5001/projects/all";
+  const URL = "http://localhost:5001/projects/all";
 
   const getProjectData = async () => {
     const response = await fetch(URL);

@@ -1,8 +1,53 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Typography, Box, Button, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Home() {
+  const [loggedInUser, setLoggedInUser] = useState({});
+  const { userStatus, setUserStatus } = useContext(AuthContext);
+
+  const handleLoginChange = (event) => {
+    setLoggedInUser({
+      ...loggedInUser,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const submitLogin = async (request, response) => {
+    console.log(loggedInUser);
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("email", loggedInUser.email);
+    urlencoded.append("password", loggedInUser.password);
+
+    const requestOptions = {
+      method: "POST",
+      body: urlencoded,
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:5001/users/login",
+        requestOptions
+      );
+      const result = await response.json();
+      const { user } = result;
+
+      if (user.token) {
+        localStorage.setItem("token", user.token);
+        setUserStatus(true);
+        console.log("SUCCESS: Token set in local storage.");
+      } else {
+        console.log("ERROR: Token could not be set in local storage.");
+      }
+
+      console.log("Login result: ", result);
+      // TODO: alert for success and error, plus redirection
+    } catch (error) {
+      console.log("ERROR: User could not be logged in.");
+    }
+  };
+
   return (
     <div id="home-screen">
       <Box
@@ -62,6 +107,8 @@ export default function Home() {
             <TextField
               variant="standard"
               label="E-Mail"
+              name="email"
+              onChange={handleLoginChange}
               required
               style={{ marginTop: "1rem" }}
             />
@@ -69,15 +116,19 @@ export default function Home() {
               variant="standard"
               type="password"
               label="Password"
+              name="password"
+              onChange={handleLoginChange}
               required
               style={{ marginTop: "0.5rem" }}
             />
             <Box style={{ textAlign: "center" }}>
-              <Link to="/dashboard">
-                <Button variant="contained" style={{ marginTop: "1.5rem" }}>
-                  Login
-                </Button>
-              </Link>
+              <Button
+                variant="contained"
+                onClick={submitLogin}
+                style={{ marginTop: "1.5rem" }}
+              >
+                Login
+              </Button>
             </Box>
           </Box>
         </Box>

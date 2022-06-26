@@ -134,26 +134,32 @@ const logIn = async (request, response) => {
       .status(401)
       .json({ message: "ERROR: User does not exist. Please register first." });
   } else {
+    console.log("User exists. Proceeding with password verification ...");
     const verified = await verifyPassword(
       request.body.password,
       existingUser.password
     );
-    console.log("Hashed password from MongoDB: ", existingUser.password);
-    console.log("Plaintext password from user: ", request.body.password);
+    console.log("User password (hashed): ", existingUser.password);
+    console.log("User password (plain): ", request.body.password);
     if (!verified) {
       response.status(401).json({ message: "ERROR: Password incorrect." });
+      console.log("ERROR: Password did not match.");
     } else {
+      console.log(
+        "SUCCESS: Password matched. Proceeding with issuing token ..."
+      );
       const token = issueToken(existingUser.id);
       response.status(200).json({
-        message: "SUCCESS: User password verified.",
+        message: "SUCCESS: User password verified. Token issued.",
         user: {
           firstName: existingUser.firstName,
           lastName: existingUser.lastName,
           email: existingUser.email,
           _id: existingUser.id,
+          token: token,
         },
       });
-      console.log("SUCCESS: User password verified.", verified);
+      console.log("SUCCESS: Token issued.");
     }
   }
 };

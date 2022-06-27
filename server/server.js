@@ -2,12 +2,14 @@ import express from "express";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
+import passport from "passport";
+import passportConfig from "./config/passport.js";
+import { findAllArticles } from "./controller/articlesController.js";
 
 // * Importing routes
 import usersRoute from "./routes/usersRoute.js";
 import articlesRoute from "./routes/articlesRoute.js";
 import projectsRoute from "./routes/projectsRoute.js";
-import { findAllArticles } from "./controller/articlesController.js";
 
 // * loading .env file
 dotenv.config();
@@ -40,6 +42,8 @@ const addMiddleware = () => {
     credentials: true,
   };
   app.use(cors(corsOptions));
+  app.use(passport.initialize());
+  passportConfig(passport);
 };
 
 const connectToMongoDB = async () => {

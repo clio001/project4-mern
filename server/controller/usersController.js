@@ -160,8 +160,20 @@ const logIn = async (request, response) => {
         },
       });
       console.log("SUCCESS: Token issued.");
+      console.log("ExistingUser ID: ", existingUser.id);
     }
   }
+};
+
+// * Authorizing
+
+const getProfile = (request, response) => {
+  //  console.log("getProfile user from request: ", request.user);
+  response.status(200).json({
+    email: request.body.email,
+    firstName: request.body.firstName,
+    lastName: request.body.lastName,
+  });
 };
 
 export {
@@ -171,4 +183,5 @@ export {
   findUserByName,
   signUp,
   logIn,
+  getProfile,
 };

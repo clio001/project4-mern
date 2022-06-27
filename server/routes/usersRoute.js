@@ -6,7 +6,9 @@ import {
   queryUsersByRole,
   signUp,
   logIn,
+  getProfile,
 } from "../controller/usersController.js";
+import jwtAuth from "../utils/jwtAuth.js";
 // import User from "../models/userModel.js";
 
 const router = express.Router();
@@ -16,17 +18,11 @@ router.get("/test", (request, response) => {
   response.send({ response: "Access to test route successful!" });
 });
 
-// * FIND ALL USERS endpoint
-router.get("/all", findAllUsers);
-
-// * FIND USERS by role
-router.get("/:role", queryUsersByRole);
-
-// * SIGNUP route for new users
+router.get("/all", findAllUsers); // * FIND ALL USERS endpoint
+router.get("/:role", queryUsersByRole); // * FIND USERS by role
 router.post("/signup", signUp);
-
-// * LOGIN route
-
 router.post("/login", logIn);
+
+router.get("/profile", jwtAuth, getProfile);
 
 export default router;

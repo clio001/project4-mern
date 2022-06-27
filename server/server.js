@@ -42,8 +42,10 @@ const addMiddleware = () => {
     credentials: true,
   };
   app.use(cors(corsOptions));
+
   app.use(passport.initialize());
   passportConfig(passport);
+  // console.log("Passport config running: ", passportConfig(passport)); // ! Should this be "undefined"???
 };
 
 const connectToMongoDB = async () => {

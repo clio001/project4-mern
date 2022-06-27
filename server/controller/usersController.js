@@ -41,7 +41,7 @@ const findUsersByRole = async (request, response) => {
   try {
     const usersByRole = await User.find({ role: request.params.role }).exec();
     if (usersByRole.length === 0) {
-      response.status(204).json({ message: "No users with this role." });
+      response.status(404).json({ message: "No users with this role." });
     } else {
       response.status(200).json({ usersByRole, number: usersByRole.length });
       console.log("Users by role: ", usersByRole);
@@ -168,11 +168,11 @@ const logIn = async (request, response) => {
 // * Authorizing
 
 const getProfile = (request, response) => {
-  //  console.log("getProfile user from request: ", request.user);
+  console.log("getProfile user from request: ", request.user);
   response.status(200).json({
-    email: request.body.email,
-    firstName: request.body.firstName,
-    lastName: request.body.lastName,
+    email: request.user.email,
+    firstName: request.user.firstName,
+    lastName: request.user.lastName,
   });
 };
 

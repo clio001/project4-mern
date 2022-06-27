@@ -19,7 +19,7 @@ router.get("/test", (request, response) => {
 });
 
 router.get("/all", findAllUsers); // * FIND ALL USERS endpoint
-router.get("/:role", queryUsersByRole); // * FIND USERS by role
+router.get("/foo/:role", queryUsersByRole); // * FIND USERS by role
 router.post("/signup", signUp);
 router.post("/login", logIn);
 

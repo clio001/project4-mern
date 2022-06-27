@@ -9,12 +9,12 @@ const jwtOptions = {
   secretOrKey: process.env.SECRET_OR_KEY,
 };
 
-console.log("jwtOptions", jwtOptions);
+// console.log("jwtOptions", jwtOptions);
 
 // ! PROBLEM STARTS HERE
 
 const jwtStrategy = new JwtStrategy(jwtOptions, function (jwt_payload, done) {
-  console.log("jwtStrategy jwt_payload: ", jwt_payload); // ! NOT CONSOLE LOGGED
+  //   console.log("jwtStrategy jwt_payload: ", jwt_payload); // ! NOT CONSOLE LOGGED
   User.findById(jwt_payload.sub, function (error, user) {
     console.log("user in passport.js", user);
     if (error) {
@@ -34,6 +34,7 @@ const jwtStrategy = new JwtStrategy(jwtOptions, function (jwt_payload, done) {
 
 const passportConfig = (passport) => {
   passport.use(jwtStrategy);
+  console.log(jwtStrategy);
 };
 
 export default passportConfig;

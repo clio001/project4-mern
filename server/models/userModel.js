@@ -4,11 +4,9 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
   firstName: {
     type: String,
-    required: true,
   },
   lastName: {
     type: String,
-    required: true,
   },
   organization: {
     type: String,
@@ -34,7 +32,6 @@ const userSchema = new Schema({
 
   role: {
     type: String,
-    required: true,
   },
   createdAt: {
     type: Date,

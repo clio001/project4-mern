@@ -53,30 +53,30 @@ export default function Navbar() {
             Menu
           </Typography>
           <Divider style={{ marginBottom: "0.5rem" }} />{" "}
-          <Link to="/dashboard">
-            <Link to="/dashboard">
-              <MenuItem>
-                <ListItemIcon>
-                  <InfoIcon />
-                </ListItemIcon>
-                <ListItemText style={{ color: "grey" }}>About</ListItemText>
-              </MenuItem>
-            </Link>
+          <Link to="/about">
             <MenuItem>
               <ListItemIcon>
-                <DashboardIcon />
+                <InfoIcon />
               </ListItemIcon>
-              <ListItemText style={{ color: "grey" }}>Dashboard</ListItemText>
+              <ListItemText style={{ color: "grey" }}>About</ListItemText>
             </MenuItem>
           </Link>
-          <Link to="/registration">
+          <Link to="/user-profile">
             <MenuItem>
               <ListItemIcon>
                 <AccountCircleIcon />
               </ListItemIcon>
               <ListItemText style={{ color: "grey" }}>
-                Registration
+                User account
               </ListItemText>
+            </MenuItem>
+          </Link>
+          <Link to="/dashboard">
+            <MenuItem>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText style={{ color: "grey" }}>Dashboard</ListItemText>
             </MenuItem>
           </Link>
           <Link to="/list">
@@ -87,7 +87,7 @@ export default function Navbar() {
               <ListItemText style={{ color: "grey" }}>All Members</ListItemText>
             </MenuItem>
           </Link>
-          <Link to="/dashboard">
+          <Link to="/help">
             <MenuItem>
               <ListItemIcon>
                 <HelpIcon />

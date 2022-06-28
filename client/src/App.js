@@ -8,11 +8,14 @@ import ViewRegistration from "./views/ViewRegistration";
 import ViewDashboard from "./views/ViewDashboard";
 import ViewCreateProject from "./views/ViewCreateProject";
 import ViewProject from "./views/ViewProject";
+import ViewProfile from "./views/ViewProfile";
 
 // * Import contexts
 import { FetchContextProvider } from "./context/FetchContext";
 import { ProjectFetchContextProvider } from "./context/ProjectFetchContext";
 import { AuthContextProvider } from "./context/AuthContext";
+import ViewAbout from "./views/ViewAbout";
+import ViewHelp from "./views/ViewHelp";
 
 function App() {
   return (
@@ -27,6 +30,9 @@ function App() {
               <Route path="dashboard" element={<ViewDashboard />} />
               <Route path="newproject" element={<ViewCreateProject />} />
               <Route path="singleproject" element={<ViewProject />} />
+              <Route path="user-profile" element={<ViewProfile />} />
+              <Route path="about" element={<ViewAbout />} />
+              <Route path="help" element={<ViewHelp />} />
             </Routes>
           </AuthContextProvider>
         </FetchContextProvider>

@@ -173,6 +173,8 @@ const getProfile = (request, response) => {
     email: request.user.email,
     firstName: request.user.firstName,
     lastName: request.user.lastName,
+    organization: request.user.organization,
+    role: request.user.role,
   });
 };
 

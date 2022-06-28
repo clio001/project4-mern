@@ -10,9 +10,11 @@ import React, { useContext } from "react";
 import "../App.css";
 import { ProjectFetchContext } from "../context/ProjectFetchContext";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Dashboard() {
   const { projectData } = useContext(ProjectFetchContext);
+  const { userProfile } = useContext(AuthContext);
 
   return (
     <>
@@ -29,9 +31,15 @@ export default function Dashboard() {
           >
             <Box style={{ display: "flex", justifyContent: "space-between" }}>
               <Box>
-                <Typography variant="caption" color="text.secondary">
-                  Dashboard / user
-                </Typography>
+                {userProfile ? (
+                  <Typography variant="caption" color="text.secondary">
+                    Dashboard / {userProfile.firstName} {userProfile.lastName}
+                  </Typography>
+                ) : (
+                  <Typography variant="caption" color="text.secondary">
+                    Dashboard / Not logged in
+                  </Typography>
+                )}
                 <Typography variant="h2" component="h2" mb={4}>
                   Dashboard
                 </Typography>
@@ -74,13 +82,17 @@ export default function Dashboard() {
                     <Box className="dashboard-box-container" key={i}>
                       <Link to="/singleproject">
                         <Box>
+                          <img
+                            src="https://www.projectsmart.co.uk/img/project.png"
+                            style={{ width: "200px" }}
+                          />
                           <Typography variant="caption" color="text.secondary">
                             Project
                           </Typography>
                           <Typography variant="subtitle1">
                             {element.name}
                           </Typography>
-                          <Box mt={1}>
+                          {/*  <Box mt={1}>
                             {" "}
                             <Typography
                               variant="caption"
@@ -91,7 +103,7 @@ export default function Dashboard() {
                             <Typography variant="body2">
                               {element.description}
                             </Typography>
-                          </Box>
+                          </Box> */}
                           {/*  <Box
                         style={{ display: "flex", justifyContent: "center" }}
                         mt={3}

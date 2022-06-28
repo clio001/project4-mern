@@ -40,7 +40,7 @@ export default function Dashboard() {
                     Dashboard / Not logged in
                   </Typography>
                 )}
-                <Typography variant="h2" component="h2" mb={4}>
+                <Typography variant="h3" component="h2" mb={4}>
                   Dashboard
                 </Typography>
               </Box>
@@ -83,7 +83,7 @@ export default function Dashboard() {
                       <Link to="/singleproject">
                         <Box>
                           <img
-                            src="https://www.projectsmart.co.uk/img/project.png"
+                            src="https://icon-library.com/images/file_light-14-512.png"
                             style={{ width: "200px" }}
                           />
                           <Typography variant="caption" color="text.secondary">

@@ -28,8 +28,8 @@ function App() {
               <Route path="list" element={<ViewList />} />
               <Route path="registration" element={<ViewRegistration />} />{" "}
               <Route path="dashboard" element={<ViewDashboard />} />
-              <Route path="newproject" element={<ViewCreateProject />} />
-              <Route path="singleproject" element={<ViewProject />} />
+              <Route path="new-project" element={<ViewCreateProject />} />
+              <Route path="single-project" element={<ViewProject />} />
               <Route path="user-profile" element={<ViewProfile />} />
               <Route path="about" element={<ViewAbout />} />
               <Route path="help" element={<ViewHelp />} />

@@ -7,11 +7,10 @@ export const AuthContext = createContext();
 export const AuthContextProvider = (props) => {
   const [userStatus, setUserStatus] = useState(false);
   const [userProfile, setUserProfile] = useState({});
+  const token = getToken();
   let navigate = useNavigate();
 
   const isLoggedIn = () => {
-    const token = getToken();
-
     if (token) {
       setUserStatus(true);
     } else {
@@ -28,7 +27,6 @@ export const AuthContextProvider = (props) => {
   };
 
   const getProfileData = async () => {
-    const token = getToken();
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${token}`);
     const requestOptions = {
@@ -42,6 +40,7 @@ export const AuthContextProvider = (props) => {
       );
       const profileData = await response.json();
       setUserProfile(profileData);
+      console.log("Profile data: ", profileData);
     } catch (error) {
       console.log("Error fetching profile data: ", error);
     }
@@ -57,7 +56,14 @@ export const AuthContextProvider = (props) => {
 
   return (
     <AuthContext.Provider
-      value={{ userStatus, setUserStatus, userProfile, setUserProfile, logOut }}
+      value={{
+        userStatus,
+        setUserStatus,
+        userProfile,
+        setUserProfile,
+        logOut,
+        token,
+      }}
     >
       {props.children}
     </AuthContext.Provider>

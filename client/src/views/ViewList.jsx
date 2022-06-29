@@ -20,23 +20,7 @@ export default function ViewList() {
   return (
     <div id="home-screen">
       <Navbar />
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          flexWrap: "wrap",
-        }}
-      >
-        <Typography variant="h1" m={4}>
-          List screen
-        </Typography>
-        <Typography variant="subtitle1">
-          Users from White Lake database
-        </Typography>
-        <Typography variant="body1"></Typography>
-      </Box>{" "}
+
       <Box
         style={{
           display: "flex",

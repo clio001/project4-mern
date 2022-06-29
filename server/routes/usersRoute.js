@@ -7,6 +7,8 @@ import {
   signUp,
   logIn,
   getProfile,
+  deleteUser,
+  updateAccount,
 } from "../controller/usersController.js";
 import jwtAuth from "../utils/jwtAuth.js";
 // import User from "../models/userModel.js";
@@ -18,11 +20,17 @@ router.get("/test", (request, response) => {
   response.send({ response: "Access to test route successful!" });
 });
 
-router.get("/all", findAllUsers); // * FIND ALL USERS endpoint
-router.get("/foo/:role", queryUsersByRole); // * FIND USERS by role
+// * DOCHUB ENDPOINTS
+
+router.get("/all", findAllUsers);
+router.get("/profile", jwtAuth, getProfile);
+router.get("/foo/:role", queryUsersByRole);
+
 router.post("/signup", signUp);
 router.post("/login", logIn);
 
-router.get("/profile", jwtAuth, getProfile);
+router.put("/update-profile", updateAccount);
+
+router.delete("/delete", deleteUser);
 
 export default router;

@@ -13,7 +13,6 @@ const encryptPassword = async (password) => {
 
 const verifyPassword = async (password, hashedPassword) => {
   const verified = await bcrypt.compare(password, hashedPassword);
-  console.log("verifyPassword", verifyPassword);
   return verified;
 };
 

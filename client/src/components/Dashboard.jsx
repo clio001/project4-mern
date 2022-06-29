@@ -58,7 +58,7 @@ export default function Dashboard() {
                 >
                   Search
                 </TextField>
-                <Link to="/newproject">
+                <Link to="/new-project">
                   <Button
                     variant="outlined"
                     style={{ borderColor: "#489a8e", color: "#489a8e" }}
@@ -80,7 +80,7 @@ export default function Dashboard() {
                 projectData.map((element, i) => {
                   return (
                     <Box className="dashboard-box-container" key={i}>
-                      <Link to="/singleproject">
+                      <Link to="/single-project">
                         <Box>
                           <img
                             src="https://icon-library.com/images/file_light-14-512.png"

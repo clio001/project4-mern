@@ -20,7 +20,8 @@ export default function Home() {
   const [zoomLogin, setZoomLogin] = useState(true);
   const [successAlert, setSuccessAlert] = useState(false);
   const [warningAlert, setWarningAlert] = useState(false);
-  const { userStatus, setUserStatus } = useContext(AuthContext);
+  const [loginFailAlert, setLoginFailAlert] = useState(false);
+  const { userStatus, setUserStatus, token } = useContext(AuthContext);
   let navigate = useNavigate();
 
   const handleShowSignUp = () => {
@@ -36,6 +37,7 @@ export default function Home() {
   function closeBanner() {
     setSuccessAlert(false);
     setWarningAlert(false);
+    setLoginFailAlert(false);
     navigate("/");
   }
 
@@ -95,7 +97,6 @@ export default function Home() {
       method: "POST",
       body: urlencoded,
     };
-
     try {
       const response = await fetch(
         "http://localhost:5001/users/login",
@@ -117,6 +118,8 @@ export default function Home() {
       // TODO: alert for success and error, plus redirection
     } catch (error) {
       console.log("ERROR: User could not be logged in.");
+      setLoginFailAlert(true);
+      setTimeout(closeBanner, 3000);
     }
   };
 
@@ -128,8 +131,13 @@ export default function Home() {
         </Alert>
       </Collapse>
       <Collapse in={warningAlert}>
-        <Alert severity="warning">
+        <Alert severity="error">
           Account already exists. Please, use different email!
+        </Alert>
+      </Collapse>
+      <Collapse in={loginFailAlert}>
+        <Alert severity="error">
+          Login failed. Try again or sign up a new account.
         </Alert>
       </Collapse>
       <Box

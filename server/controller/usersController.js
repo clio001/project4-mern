@@ -168,14 +168,65 @@ const logIn = async (request, response) => {
 // * Authorizing
 
 const getProfile = (request, response) => {
-  console.log("getProfile user from request: ", request.user);
   response.status(200).json({
     email: request.user.email,
     firstName: request.user.firstName,
     lastName: request.user.lastName,
     organization: request.user.organization,
     role: request.user.role,
+    project: request.user.project,
+    _id: request.user.id,
   });
+};
+
+// * Delete user account
+
+const deleteUser = async (request, response) => {
+  const existingUser = await User.findOne({ email: request.body.email });
+  if (existingUser) {
+    console.log("ExistingUser from deleteUser", existingUser);
+    try {
+      const result = await User.deleteOne({ email: request.body.email });
+      console.log("Result from account deletion: ", result);
+      response.status(200).json({
+        message: "SUCCESS: User account deleted.",
+        result: result,
+      });
+    } catch (error) {
+      response.status(404).json({
+        message: "ERROR: User exists but unable to delete account.",
+        error: error,
+      });
+    }
+  } else {
+    response.status(410).json({
+      message:
+        "ERROR: User email does not exist in database. Could not delete user.",
+    });
+  }
+};
+
+// * Update account information
+
+const updateAccount = async (request, response) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(request.body.id, {
+      firstName: request.body.firstName,
+      lastName: request.body.lastName,
+      organization: request.body.organization,
+      role: request.body.role,
+      project: request.body.project,
+    });
+    console.log("updatedUser: ", updatedUser);
+    response.status(200).json({
+      message: "SUCCESS: User info updated.",
+      user: updatedUser,
+    });
+  } catch (error) {
+    response.status(400).json({
+      message: "ERROR: Unable to update account information.",
+    });
+  }
 };
 
 export {
@@ -186,4 +237,6 @@ export {
   signUp,
   logIn,
   getProfile,
+  deleteUser,
+  updateAccount,
 };

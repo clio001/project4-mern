@@ -16,6 +16,7 @@ import { ProjectFetchContextProvider } from "./context/ProjectFetchContext";
 import { AuthContextProvider } from "./context/AuthContext";
 import ViewAbout from "./views/ViewAbout";
 import ViewHelp from "./views/ViewHelp";
+import ViewObject from "./views/ViewObject";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               <Route path="user-profile" element={<ViewProfile />} />
               <Route path="about" element={<ViewAbout />} />
               <Route path="help" element={<ViewHelp />} />
+              <Route path="single-object" element={<ViewObject />} />
             </Routes>
           </AuthContextProvider>
         </FetchContextProvider>

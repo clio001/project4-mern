@@ -10,6 +10,7 @@ import { findAllArticles } from "./controller/articlesController.js";
 import usersRoute from "./routes/usersRoute.js";
 import articlesRoute from "./routes/articlesRoute.js";
 import projectsRoute from "./routes/projectsRoute.js";
+import objectsRoute from "./routes/objectsRoute.js";
 
 // * loading .env file
 dotenv.config();
@@ -28,6 +29,7 @@ const loadRoutes = () => {
   app.use("/users", usersRoute);
   app.use("/projects", projectsRoute);
   app.use("/articles", articlesRoute);
+  app.use("/objects", objectsRoute);
 
   // app.use("/teams");
   /*     app.use("/projects") PROJECTS

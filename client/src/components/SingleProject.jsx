@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function SingleProject() {
   const navigate = useNavigate();
@@ -30,6 +31,20 @@ function SingleProject() {
             xl={12}
             sx={{ display: "flex", justifyContent: "flex-end" }}
           >
+            <Link to="/single-object">
+              <Button
+                variant="outlined"
+                size="small"
+                sx={{
+                  marginTop: "0.5rem",
+                  marginRight: "0.5rem",
+                  borderColor: "#489a8e",
+                  color: "#489a8e",
+                }}
+              >
+                Object
+              </Button>
+            </Link>
             <Button
               variant="outlined"
               onClick={redirectBack}

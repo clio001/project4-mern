@@ -50,3 +50,15 @@ a:visited {
   border-radius: 25px 5px 25px 5px;
   box-shadow: 0px 0px 10px #489a8e;
 }
+
+/** Object component **/
+
+.object-img {
+  width: 100%;
+}
+
+.comment-item {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 0.2rem;
+}

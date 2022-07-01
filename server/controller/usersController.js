@@ -217,7 +217,6 @@ const updateAccount = async (request, response) => {
       role: request.body.role,
       project: request.body.project,
     });
-    console.log("updatedUser: ", updatedUser);
     response.status(200).json({
       message: "SUCCESS: User info updated.",
       user: updatedUser,

@@ -98,7 +98,6 @@ function UserProfile() {
     urlencoded.append("project", updatedInfo.project);
     urlencoded.append("role", updatedInfo.role);
     urlencoded.append("id", userProfile._id);
-    console.log(userProfile._id);
 
     const requestOptions = {
       method: "PUT",

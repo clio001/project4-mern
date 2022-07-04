@@ -6,8 +6,8 @@ function CommentItem(props) {
   const element = props.element;
   const index = props.index;
   return (
-    <div>
-      <Box className="comment-item" key={index} mb={1}>
+    <div key={index}>
+      <Box className="comment-item" mb={1}>
         <Box
           sx={{
             display: "flex",

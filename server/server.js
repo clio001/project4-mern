@@ -47,7 +47,7 @@ const addMiddleware = () => {
 
   app.use(passport.initialize());
   passportConfig(passport);
-  // console.log("Passport config running: ", passportConfig(passport)); // ! Should this be "undefined"???
+  // console.log("Passport config running: ", passportConfig(passport));
 };
 
 const connectToMongoDB = async () => {

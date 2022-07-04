@@ -40,7 +40,7 @@ function CreateProject() {
 
     // * Define request options as a post request and that the form data is submitted in the body of the request
 
-    var requestOptions = {
+    const requestOptions = {
       method: "POST",
       body: urlencoded,
     };

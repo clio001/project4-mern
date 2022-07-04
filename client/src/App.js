@@ -17,6 +17,8 @@ import { AuthContextProvider } from "./context/AuthContext";
 import ViewAbout from "./views/ViewAbout";
 import ViewHelp from "./views/ViewHelp";
 import ViewObject from "./views/ViewObject";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { ObjectContextProvider } from "./context/ObjectContext";
 
 function App() {
   return (
@@ -24,18 +26,58 @@ function App() {
       <ProjectFetchContextProvider>
         <FetchContextProvider>
           <AuthContextProvider>
-            <Routes>
-              <Route path="/" element={<ViewLanding />} />
-              <Route path="list" element={<ViewList />} />
-              <Route path="registration" element={<ViewRegistration />} />{" "}
-              <Route path="dashboard" element={<ViewDashboard />} />
-              <Route path="new-project" element={<ViewCreateProject />} />
-              <Route path="single-project" element={<ViewProject />} />
-              <Route path="user-profile" element={<ViewProfile />} />
-              <Route path="about" element={<ViewAbout />} />
-              <Route path="help" element={<ViewHelp />} />
-              <Route path="single-object" element={<ViewObject />} />
-            </Routes>
+            <ObjectContextProvider>
+              <Routes>
+                <Route path="/" element={<ViewLanding />} />
+                <Route path="about" element={<ViewAbout />} />
+                <Route path="help" element={<ViewHelp />} />
+                <Route path="list" element={<ViewList />} />
+                <Route
+                  path="registration"
+                  element={<ViewRegistration />}
+                />{" "}
+                <Route
+                  path="dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <ViewDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="new-project"
+                  element={
+                    <ProtectedRoute>
+                      <ViewCreateProject />{" "}
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="single-project"
+                  element={
+                    <ProtectedRoute>
+                      <ViewProject />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="user-profile"
+                  element={
+                    <ProtectedRoute>
+                      <ViewProfile />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="single-object"
+                  element={
+                    <ProtectedRoute>
+                      <ViewObject />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </ObjectContextProvider>
           </AuthContextProvider>
         </FetchContextProvider>
       </ProjectFetchContextProvider>

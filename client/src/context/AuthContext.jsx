@@ -7,12 +7,16 @@ export const AuthContext = createContext();
 export const AuthContextProvider = (props) => {
   const [userStatus, setUserStatus] = useState(false);
   const [userProfile, setUserProfile] = useState({});
+
   const token = getToken();
   let navigate = useNavigate();
+
+  // * Set userAuthorized to check authorization
 
   const isLoggedIn = () => {
     if (token) {
       setUserStatus(true);
+      console.log("=> User is logged in.");
     } else {
       setUserStatus(false);
     }
@@ -23,7 +27,7 @@ export const AuthContextProvider = (props) => {
     localStorage.removeItem("token");
     setUserStatus(false);
     navigate("/");
-    console.log("=> User has been logged out.");
+    console.log("=> User is logged out.");
   };
 
   const getProfileData = async () => {

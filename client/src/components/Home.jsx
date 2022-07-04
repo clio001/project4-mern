@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Typography,
   Box,
@@ -23,6 +23,16 @@ export default function Home() {
   const [loginFailAlert, setLoginFailAlert] = useState(false);
   const { userStatus, setUserStatus, token } = useContext(AuthContext);
   let navigate = useNavigate();
+
+  const redirectIfLoggedIn = () => {
+    if (userStatus) {
+      navigate("/dashboard");
+    }
+  };
+
+  useEffect(() => {
+    redirectIfLoggedIn();
+  }, []);
 
   const handleShowSignUp = () => {
     if (showSignUp) {
@@ -114,7 +124,7 @@ export default function Home() {
       }
 
       console.log("Login result: ", result);
-      navigate("/user-profile");
+      navigate("/dashboard");
       // TODO: alert for success and error, plus redirection
     } catch (error) {
       console.log("ERROR: User could not be logged in.");

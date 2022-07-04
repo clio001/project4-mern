@@ -25,7 +25,7 @@ import { AuthContext } from "../context/AuthContext";
 
 export default function Navbar() {
   const [show, setShow] = useState(false);
-  const { userStatus, logOut } = useContext(AuthContext);
+  const { userStatus, userProfile, logOut } = useContext(AuthContext);
 
   const handleShow = () => {
     if (show) {
@@ -53,38 +53,47 @@ export default function Navbar() {
             Menu
           </Typography>
           <Divider style={{ marginBottom: "0.5rem" }} />{" "}
+          {userStatus && (
+            <>
+              <Link to="/user-profile">
+                <MenuItem>
+                  <ListItemIcon>
+                    <AccountCircleIcon />
+                  </ListItemIcon>
+                  <ListItemText style={{ color: "grey" }}>
+                    User account
+                  </ListItemText>
+                </MenuItem>
+              </Link>
+              <Link to="/dashboard">
+                <MenuItem>
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText style={{ color: "grey" }}>
+                    Dashboard
+                  </ListItemText>
+                </MenuItem>
+              </Link>
+              <Link to="/list">
+                <MenuItem>
+                  <ListItemIcon>
+                    <GroupIcon />
+                  </ListItemIcon>
+                  <ListItemText style={{ color: "grey" }}>
+                    All Members
+                  </ListItemText>
+                </MenuItem>
+              </Link>
+              <Divider style={{ marginBottom: "0.5rem" }} />{" "}
+            </>
+          )}
           <Link to="/about">
             <MenuItem>
               <ListItemIcon>
                 <InfoIcon />
               </ListItemIcon>
               <ListItemText style={{ color: "grey" }}>About</ListItemText>
-            </MenuItem>
-          </Link>
-          <Link to="/user-profile">
-            <MenuItem>
-              <ListItemIcon>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              <ListItemText style={{ color: "grey" }}>
-                User account
-              </ListItemText>
-            </MenuItem>
-          </Link>
-          <Link to="/dashboard">
-            <MenuItem>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText style={{ color: "grey" }}>Dashboard</ListItemText>
-            </MenuItem>
-          </Link>
-          <Link to="/list">
-            <MenuItem>
-              <ListItemIcon>
-                <GroupIcon />
-              </ListItemIcon>
-              <ListItemText style={{ color: "grey" }}>All Members</ListItemText>
             </MenuItem>
           </Link>
           <Link to="/help">

@@ -200,12 +200,10 @@ function UserProfile() {
                 />
               </Box>
               <Box sx={{}}>
-                {userProfile.firstName ? (
+                {userProfile.firstName && (
                   <Typography variant="h5">
                     {userProfile.firstName} {userProfile.lastName}{" "}
                   </Typography>
-                ) : (
-                  <Typography variant="h5">No username</Typography>
                 )}
 
                 {userProfile.organization ? (
@@ -236,7 +234,10 @@ function UserProfile() {
             <Grid item xs={12} sm={6} md={6} lg={3} xl={3}>
               <Box style={{ marginLeft: "0.5rem", marginTop: "0.5rem" }}>
                 <Typography variant="subtitle2">Objects</Typography>
-                <Typography>5th IPCC Report</Typography>
+                {userProfile.object &&
+                  userProfile.object.map((element, i) => {
+                    return <Typography>{element.title}</Typography>;
+                  })}
               </Box>
             </Grid>
             <Grid item xs={0} sm={0} md={0} lg={4} xl={4}></Grid>

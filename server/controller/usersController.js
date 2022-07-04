@@ -155,7 +155,9 @@ const logIn = async (request, response) => {
           firstName: existingUser.firstName,
           lastName: existingUser.lastName,
           email: existingUser.email,
+          project: existingUser.project,
           _id: existingUser.id,
+          object: existingUser.object,
           token: token,
         },
       });
@@ -173,6 +175,7 @@ const getProfile = (request, response) => {
     firstName: request.user.firstName,
     lastName: request.user.lastName,
     organization: request.user.organization,
+    object: request.user.object,
     role: request.user.role,
     project: request.user.project,
     _id: request.user.id,

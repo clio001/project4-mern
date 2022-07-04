@@ -20,9 +20,13 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  project: {
-    type: String,
-  },
+  project: [
+    {
+      type: String,
+    },
+  ],
+  object: [],
+
   /*   imgPath: {
     type: String,
   }, */

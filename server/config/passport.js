@@ -21,6 +21,9 @@ const jwtStrategy = new JwtStrategy(jwtOptions, function (jwt_payload, done) {
     if (user) {
       console.log("SUCCESS: User found! (jwtStrategy)");
       return done(null, user);
+      response.status(200).json({
+        message: "SUCCESS: User ",
+      });
     } else {
       console.log("ERROR: User ID not found. Create new account. (jwtStrategy");
       return done(null, false);

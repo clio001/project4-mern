@@ -17,6 +17,26 @@ const getAllObjects = async (request, response) => {
   }
 };
 
+// * GET object by ID
+
+const getObjectByID = async (request, response) => {
+  console.log("Params: ", request.params.id);
+  try {
+    const result = await Object.where("date")
+      .equals(request.params.id)
+      .select(
+        "title creator archive date description type createdAt comments _id rights image_url web_url"
+      );
+
+    response.status(200).json({
+      message: "SUCCESS: Object retrieved.",
+      result,
+    });
+  } catch (error) {
+    console.log("ERROR: Object title not found.");
+  }
+};
+
 // * POST new object
 
 const postNewObject = async (request, response) => {
@@ -42,7 +62,7 @@ const postNewObject = async (request, response) => {
       };
       const result = await Object.create(newObject);
 
-      console.log("SUCESS: New object created.");
+      console.log("SUCCESS: New object created.");
 
       const resultUserUpdate = await User.findByIdAndUpdate(
         request.body.user_id,
@@ -111,4 +131,10 @@ const postComment = async (request, response) => {
   }
 };
 
-export { getAllObjects, postNewObject, getComments, postComment };
+export {
+  getAllObjects,
+  getObjectByID,
+  postNewObject,
+  getComments,
+  postComment,
+};

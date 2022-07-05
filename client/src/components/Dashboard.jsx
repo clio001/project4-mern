@@ -3,12 +3,7 @@ import {
   Box,
   Paper,
   Button,
-  Modal,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Grid,
   IconButton,
   Drawer,
@@ -166,38 +161,96 @@ export default function Dashboard() {
             </Box>
           </Box>
         </Drawer>
-        <Paper elevation={3}>
+        <Paper elevation={3} id="home-screen">
           <Grid container spacing={2} sx={{ marginLeft: "0.1rem" }}>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
               {" "}
               <Box>
-                {userProfile ? (
+                {userProfile && (
                   <>
-                    <Typography variant="caption" color="text.secondary">
-                      Dashboard / {userProfile.firstName} {userProfile.lastName}
-                    </Typography>{" "}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      <Typography variant="caption" color="text.secondary">
+                        Dashboard / {userProfile.firstName}{" "}
+                        {userProfile.lastName}
+                      </Typography>
+                      <TextField
+                        label="Search"
+                        variant="standard"
+                        sx={{ pr: "1rem" }}
+                        size="small"
+                      >
+                        Search
+                      </TextField>
+                    </Box>{" "}
                     <Typography variant="h3" component="h2">
                       Dashboard
                     </Typography>
-                    <Box sx={{ marginTop: "1rem" }}>
-                      Objects:
-                      <Chip
-                        label={`${userProfile.object.length}`}
-                        variant="outlined"
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      {/* <Box sx={{ marginTop: "1rem", fontSize: "small" }}>
+                        Docs:
+                        <Chip
+                          label={`${userProfile.object.length}`}
+                          variant="outlined"
+                          sx={{
+                            marginLeft: "0.5rem",
+
+                            color: "#489a8e",
+                            borderColor: "#489a8e",
+                          }}
+                        />
+                      </Box> */}
+                      <Box
                         sx={{
+                          marginTop: "1rem",
                           marginLeft: "0.5rem",
-                          backgroundColor: "#489a8e",
-                          color: "white",
-                          borderColor: "white",
+                          fontSize: "small",
                         }}
-                      />
+                      >
+                        Comments:
+                        <Chip
+                          label="12"
+                          variant="outlined"
+                          sx={{
+                            marginLeft: "0.5rem",
+                            color: "#489a8e",
+                            borderColor: "#489a8e",
+                          }}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          marginTop: "1rem",
+                          marginLeft: "0.5rem",
+                          fontSize: "small",
+                        }}
+                      >
+                        Likes:
+                        <Chip
+                          label="24"
+                          variant="outlined"
+                          sx={{
+                            marginLeft: "0.5rem",
+
+                            color: "#489a8e",
+                            borderColor: "#489a8e",
+                          }}
+                        />
+                      </Box>
                     </Box>
-                  </>
-                ) : (
-                  <>
-                    <Typography variant="caption" color="text.secondary">
-                      Dashboard / Not logged in
-                    </Typography>
                   </>
                 )}
               </Box>
@@ -212,13 +265,6 @@ export default function Dashboard() {
                     alignItems: "baseline",
                   }}
                 >
-                  <TextField
-                    label="Search"
-                    variant="standard"
-                    sx={{ pr: "1rem" }}
-                  >
-                    Search
-                  </TextField>
                   {/*                   <Link to="/new-project">
                     <Button
                       variant="outlined"
@@ -228,9 +274,13 @@ export default function Dashboard() {
                     </Button> </Link>*/}
 
                   <Button
-                    variant="outlined"
+                    variant="contained"
                     onClick={handleNewObject}
-                    style={{ borderColor: "#489a8e", color: "#489a8e" }}
+                    style={{
+                      borderColor: "#489a8e",
+                      backgroundColor: "#489a8e",
+                      color: "white",
+                    }}
                   >
                     <PostAddIcon />
                   </Button>
@@ -243,36 +293,73 @@ export default function Dashboard() {
                   display: "flex",
                   flexDirection: "row",
                   flexWrap: "wrap",
+                  justifyContent: "flex-start",
+                  marginBottom: "4rem",
                 }}
               >
-                {userProfile && console.log(userProfile.object)}
                 {userProfile.object &&
                   userProfile.object.map((element, i) => {
-                    console.log(element);
                     return (
-                      <Box className="dashboard-box-container" key={i}>
-                        <Link to="/single-object">
-                          <Box>
-                            <img
-                              src="https://icon-library.com/images/file_light-14-512.png"
-                              style={{ width: "50px" }}
-                            />
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
+                      <div>
+                        <Box
+                          className="dashboard-box-container"
+                          key={i}
+                          sx={{}}
+                        >
+                          <Link to={`/single-object/${element.date}`}>
+                            <Box
+                              sx={{ display: "flex", flexDirection: "column" }}
                             >
-                              Object
-                            </Typography>
-                            <Typography variant="subtitle1">
-                              {element.title}
-                            </Typography>
-                            <Chip
-                              label={`${element.comments.length} comments`}
-                              variant="outlined"
-                            />
-                          </Box>
-                        </Link>
-                      </Box>
+                              <Box
+                                sx={{ display: "flex", flexDirection: "row" }}
+                              >
+                                <Box>
+                                  <img
+                                    src={element.image_url}
+                                    style={{
+                                      width: "75px",
+                                      marginRight: "0.5rem",
+                                      marginBottom: "0.5rem",
+                                    }}
+                                  />
+                                </Box>
+                                <Box>
+                                  <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                  >
+                                    Object
+                                  </Typography>
+                                  <Typography variant="body2">
+                                    {element.title}
+                                  </Typography>
+                                  <Typography
+                                    variant="body2"
+                                    sx={{ marginBottom: "0.5rem" }}
+                                  >
+                                    by {element.creator}
+                                  </Typography>
+                                  <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                  >
+                                    Added on
+                                  </Typography>
+                                  <Typography variant="body2">
+                                    {element.createdAt}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                              <Box>
+                                <Chip
+                                  label={`${element.comments.length} comments`}
+                                  variant="outlined"
+                                />
+                              </Box>
+                            </Box>
+                          </Link>
+                        </Box>
+                      </div>
                     );
                   })}
               </Box>

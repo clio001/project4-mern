@@ -157,7 +157,7 @@ export default function Home() {
           flexWrap: "wrap",
           justifyContent: "space-evenly",
           alignItems: "center",
-          height: "80vh",
+          height: "100%",
         }}
       >
         <Box
@@ -197,6 +197,7 @@ export default function Home() {
                   padding: "3rem",
                   borderRadius: "0.8rem",
                   opacity: "0.9",
+                  marginBottom: "4rem",
                 }}
               >
                 <Typography variant="h4">Sign up</Typography>
@@ -265,6 +266,7 @@ export default function Home() {
                   padding: "3rem",
                   borderRadius: "0.8rem",
                   opacity: "0.9",
+                  marginBottom: "5rem",
                 }}
               >
                 <Typography variant="h4">Login</Typography>

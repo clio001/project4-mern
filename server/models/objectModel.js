@@ -33,14 +33,13 @@ const objectSchema = new Schema(
     },
     comments: [
       {
-        body: String,
-        author: String,
-        date: () => Date.now(),
+        type: Schema.Types.ObjectId,
+        ref: "Comment",
       },
     ],
   },
   { timestamps: true }
 );
 
-const Object = mongoose.model("object", objectSchema);
+const Object = mongoose.model("Object", objectSchema);
 export default Object;

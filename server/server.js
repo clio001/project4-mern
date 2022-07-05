@@ -11,6 +11,7 @@ import usersRoute from "./routes/usersRoute.js";
 import articlesRoute from "./routes/articlesRoute.js";
 import projectsRoute from "./routes/projectsRoute.js";
 import objectsRoute from "./routes/objectsRoute.js";
+import commentsRoute from "./routes/commentsRoute.js";
 
 // * loading .env file
 dotenv.config();
@@ -30,6 +31,7 @@ const loadRoutes = () => {
   app.use("/projects", projectsRoute);
   app.use("/articles", articlesRoute);
   app.use("/objects", objectsRoute);
+  app.use("/comments", commentsRoute);
 
   // app.use("/teams");
   /*     app.use("/projects") PROJECTS

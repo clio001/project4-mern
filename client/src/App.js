@@ -19,6 +19,7 @@ import ViewHelp from "./views/ViewHelp";
 import ViewObject from "./views/ViewObject";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ObjectContextProvider } from "./context/ObjectContext";
+import SingleProject from "./components/SingleProject";
 
 function App() {
   return (
@@ -69,7 +70,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="single-object"
+                  path="single-object/:id"
                   element={
                     <ProtectedRoute>
                       <ViewObject />

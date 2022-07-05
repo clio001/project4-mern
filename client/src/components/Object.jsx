@@ -15,12 +15,15 @@ import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import "../App.css";
 import CommentItem from "./CommentItem";
 import { AuthContext } from "../context/AuthContext";
+import { useParams } from "react-router-dom";
 
 function Object() {
   const [item, setItem] = useState();
   const [comment, setComment] = useState();
   const [show, setShow] = useState(false);
   const { userProfile } = useContext(AuthContext);
+
+  const objectID = useParams();
 
   const handleShow = () => {
     if (show) {
@@ -30,7 +33,22 @@ function Object() {
     }
   };
 
-  // * GET Object data
+  // * GET object by ID
+
+  const getObjectByID = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5001/objects/single-object/${objectID.id}`
+      );
+      const result = await response.json();
+      setItem(result);
+      console.log("GET OBJECT DATA PARAMS: ", result);
+    } catch (error) {
+      console.log("ERROR: Unable to fetch object by date.", error);
+    }
+  };
+
+  /*   // * DEPRECATED GET Object data
 
   const getObjectData = async () => {
     let urlencoded = new URLSearchParams();
@@ -52,7 +70,7 @@ function Object() {
     } catch (error) {
       console.log("ERROR: Unable to find object data from database.", error);
     }
-  };
+  }; */
 
   // * POST Object comments
 
@@ -67,7 +85,7 @@ function Object() {
       `${userProfile.firstName} ${userProfile.lastName}`
     );
     urlencoded.append("comment", comment);
-    urlencoded.append("id", "62bd5b50de5e932b21d3f521");
+    urlencoded.append("object_id", item.result[0]._id);
 
     const requestOptions = {
       method: "POST",
@@ -76,19 +94,20 @@ function Object() {
 
     try {
       const response = await fetch(
-        "http://localhost:5001/objects/post-comment",
+        "http://localhost:5001/comments/create-comment",
         requestOptions
       );
       const result = await response.json();
       console.log("Result posting comment: ", result);
-      getObjectData();
+      getObjectByID();
     } catch (error) {
       console.log("ERROR posting comment.", error);
     }
   };
 
   useEffect(() => {
-    getObjectData();
+    /* getObjectData(); */
+    getObjectByID();
   }, []);
 
   return (
@@ -97,11 +116,12 @@ function Object() {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
             <Box>
-              <img
-                className="object-img"
-                src="https://upload.wikimedia.org/wikipedia/commons/3/32/Petermann_Franz-Josef-Land%2C_provisorische_Karte_1874.png"
-                alt="Petermann Land"
-              />
+              {item && (
+                <img
+                  className="object-img"
+                  src={`${item.result[0].image_url}`}
+                />
+              )}
             </Box>
           </Grid>
           <Grid
@@ -222,23 +242,33 @@ function Object() {
                   </>
                 )}
               </Box>
-            </Drawer>
+            </Drawer>{" "}
+            {item && (
+              <Box sx={{ marginLeft: "1rem" }}>
+                <Typography variant="h6">{item.result[0].title}</Typography>
+                <Typography variant="subtitle2">
+                  by {item.result[0].creator}, {item.result[0].archive} (
+                  {item.result[0].date})
+                </Typography>
+              </Box>
+            )}
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 marginRight: "0.5rem",
                 marginLeft: "0.5rem",
+                marginTop: "1rem",
               }}
             >
-              <Box>
+              {/*  <Box>
                 {item && (
                   <Chip
                     label={`${item.result[0].comments.length} comments`}
                     variant="outlined"
                   />
                 )}
-              </Box>
+              </Box> */}
               <Box>
                 <IconButton onClick={handleShow}>
                   <InfoIcon />
@@ -248,12 +278,15 @@ function Object() {
                 </IconButton>
               </Box>
             </Box>
-            <Box sx={{ padding: "5px", marginBottom: "5rem" }}>
+            <Box>
+              <Typography></Typography>
+            </Box>
+            {/* <Box sx={{ padding: "5px", marginBottom: "5rem" }}>
               {item &&
                 item.result[0].comments.map((element, index) => {
                   return <CommentItem element={element} index={index} />;
                 })}
-            </Box>
+            </Box> */}
             <Box
               sx={{
                 position: "fixed",

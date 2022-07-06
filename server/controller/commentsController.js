@@ -11,15 +11,22 @@ const createComment = async (request, response) => {
       object_id: request.body.object_id,
     });
 
+    const resultPush = await Object.findByIdAndUpdate(request.body.object_id, {
+      $push: { comments: result },
+    });
+
     const resultPopulate = await Object.findOne({ _id: request.body.object_id })
       .populate({
         path: "comments",
-        select: ["author"],
+        select: ["author", "body"],
       })
       .exec();
 
     response.status(200).json({
       message: "Success: Comment added to comments collection.",
+      result,
+      resultPush,
+      resultPopulate,
     });
   } catch (error) {
     response.status(400).json({

@@ -8,11 +8,13 @@ const getAllObjects = async (request, response) => {
     const allObjects = await Object.find();
     response.status(200).json({
       message: "SUCCESS: All objects found.",
+      number: allObjects.length,
       allObjects,
     });
   } catch (error) {
     response.status(404).json({
       message: "ERROR: No objects found.",
+      error: error,
     });
   }
 };
@@ -20,20 +22,22 @@ const getAllObjects = async (request, response) => {
 // * GET object by ID
 
 const getObjectByID = async (request, response) => {
-  console.log("Params: ", request.params.id);
   try {
-    const result = await Object.where("date")
-      .equals(request.params.id)
-      .select(
-        "title creator archive date description type createdAt comments _id rights image_url web_url"
-      );
+    const result = await Object.findOne({ _id: request.params.id }).populate({
+      path: "comments",
+      select: ["author", "body", "user_id"],
+    });
+    console.log("Result: ", result);
 
     response.status(200).json({
       message: "SUCCESS: Object retrieved.",
       result,
     });
   } catch (error) {
-    console.log("ERROR: Object title not found.");
+    response.status(404).json({
+      message: "ERROR: Unable to find object by id.",
+      error: error,
+    });
   }
 };
 
@@ -61,14 +65,16 @@ const postNewObject = async (request, response) => {
         comments: [],
       };
       const result = await Object.create(newObject);
+      const number = await Object.find();
 
       console.log("SUCCESS: New object created.");
 
       const resultUserUpdate = await User.findByIdAndUpdate(
         request.body.user_id,
-        { $push: { object: newObject } }
+        { $push: { object: result } }
       );
       response.status(201).json({
+        number: number.length,
         message: "SUCCESS: New object created and added to user profile.",
         result,
         resultUserUpdate,

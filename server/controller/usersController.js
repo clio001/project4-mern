@@ -18,24 +18,6 @@ const findAllUsers = async (request, response) => {
   }
 };
 
-// * Function to populate specific user with project data
-const findUserByName = async (request, response) => {
-  try {
-    const user = await User.findOne({ firstName: "Juano" })
-      .populate({
-        path: "project",
-        select: ["name"],
-      })
-      .exec();
-    response.status(200).json(user);
-  } catch (error) {
-    response.status(400).json({
-      error: error,
-      message: "Unable to find user by name and populate with project data.",
-    });
-  }
-};
-
 // * Function to retrieve all users by role
 const findUsersByRole = async (request, response) => {
   try {
@@ -158,6 +140,7 @@ const logIn = async (request, response) => {
           project: existingUser.project,
           _id: existingUser.id,
           object: existingUser.object,
+          comments: existingUser.comments,
           token: token,
         },
       });
@@ -169,16 +152,34 @@ const logIn = async (request, response) => {
 
 // * Authorizing
 
-const getProfile = (request, response) => {
+const getProfile = async (request, response) => {
+  const populateUser = await User.findOne({ _id: request.user.id })
+    .populate({
+      path: "comments",
+      select: ["author", "body", "object_id"],
+    })
+    .populate({
+      path: "object",
+      select: [
+        "_id",
+        "title",
+        "description",
+        "date",
+        "creator",
+        "type",
+        "archive",
+        "rights",
+        "web_url",
+        "image_url",
+        "comments",
+        "likes",
+        "createdAt",
+        "updatedAt",
+      ],
+    });
+
   response.status(200).json({
-    email: request.user.email,
-    firstName: request.user.firstName,
-    lastName: request.user.lastName,
-    organization: request.user.organization,
-    object: request.user.object,
-    role: request.user.role,
-    project: request.user.project,
-    _id: request.user.id,
+    user: populateUser,
   });
 };
 
@@ -227,6 +228,24 @@ const updateAccount = async (request, response) => {
   } catch (error) {
     response.status(400).json({
       message: "ERROR: Unable to update account information.",
+    });
+  }
+};
+
+// * Function to populate specific user with project data
+const findUserByName = async (request, response) => {
+  try {
+    const user = await User.findOne({ firstName: "Juano" })
+      .populate({
+        path: "project",
+        select: ["name"],
+      })
+      .exec();
+    response.status(200).json(user);
+  } catch (error) {
+    response.status(400).json({
+      error: error,
+      message: "Unable to find user by name and populate with project data.",
     });
   }
 };

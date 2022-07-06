@@ -42,7 +42,7 @@ function Object() {
       );
       const result = await response.json();
       setItem(result);
-      console.log("GET OBJECT DATA PARAMS: ", result);
+      console.log("New Item: ", result);
     } catch (error) {
       console.log("ERROR: Unable to fetch object by date.", error);
     }
@@ -72,7 +72,7 @@ function Object() {
     }
   }; */
 
-  // * POST Object comments
+  // * POST comment to Comments Collection
 
   const handleCommentInput = (e) => {
     setComment(e.target.value);
@@ -82,10 +82,11 @@ function Object() {
     let urlencoded = new URLSearchParams();
     urlencoded.append(
       "author",
-      `${userProfile.firstName} ${userProfile.lastName}`
+      `${userProfile.user.firstName} ${userProfile.user.lastName}`
     );
     urlencoded.append("comment", comment);
-    urlencoded.append("object_id", item.result[0]._id);
+    urlencoded.append("object_id", item.result._id);
+    urlencoded.append("user_id", userProfile.user._id);
 
     const requestOptions = {
       method: "POST",
@@ -99,10 +100,12 @@ function Object() {
       );
       const result = await response.json();
       console.log("Result posting comment: ", result);
+
       getObjectByID();
     } catch (error) {
       console.log("ERROR posting comment.", error);
     }
+    window.scrollTo(0, document.body.scrollHeight);
   };
 
   useEffect(() => {
@@ -114,12 +117,21 @@ function Object() {
     <div style={{ backgroundColor: "grey" }}>
       <Paper>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={6}
+            lg={6}
+            xl={6}
+            sx={{ backgroundColor: "#eceff1" }}
+          >
             <Box>
               {item && (
                 <img
                   className="object-img"
-                  src={`${item.result[0].image_url}`}
+                  src={`${item.result.image_url}`}
+                  alt="Object illustration"
                 />
               )}
             </Box>
@@ -156,7 +168,7 @@ function Object() {
                         Title
                       </Typography>
                       <Typography variant="body2">
-                        {item.result[0].title}
+                        {item.result.title}
                       </Typography>
                     </Box>
                     <Box sx={{ marginBottom: "0.5rem" }}>
@@ -164,7 +176,7 @@ function Object() {
                         Creator
                       </Typography>
                       <Typography variant="body2">
-                        {item.result[0].creator}
+                        {item.result.creator}
                       </Typography>
                     </Box>
                     <Box sx={{ marginBottom: "0.5rem" }}>
@@ -172,7 +184,7 @@ function Object() {
                         Date
                       </Typography>
                       <Typography variant="body2">
-                        {item.result[0].date}
+                        {item.result.date}
                       </Typography>
                     </Box>
                     <Box sx={{ marginBottom: "0.5rem" }}>
@@ -180,7 +192,7 @@ function Object() {
                         Description
                       </Typography>
                       <Typography variant="body2">
-                        {item.result[0].description}
+                        {item.result.description}
                       </Typography>
                     </Box>
 
@@ -189,7 +201,7 @@ function Object() {
                         Type
                       </Typography>
                       <Typography variant="body2">
-                        {item.result[0].type}
+                        {item.result.type}
                       </Typography>
                     </Box>
                     <Box sx={{ marginBottom: "0.5rem" }}>
@@ -197,7 +209,7 @@ function Object() {
                         Archive
                       </Typography>
                       <Typography variant="body2">
-                        {item.result[0].archive}
+                        {item.result.archive}
                       </Typography>
                     </Box>
                     <Box sx={{ marginBottom: "0.5rem" }}>
@@ -205,7 +217,7 @@ function Object() {
                         Rights
                       </Typography>
                       <Typography variant="body2">
-                        {item.result[0].rights}
+                        {item.result.rights}
                       </Typography>
                     </Box>
                     <Box sx={{ marginBottom: "0.5rem" }}>
@@ -213,7 +225,7 @@ function Object() {
                         Web URL
                       </Typography>
                       <Typography variant="body2">
-                        {item.result[0].web_url}
+                        {item.result.web_url}
                       </Typography>
                     </Box>
                     <Box sx={{ marginBottom: "0.5rem" }}>
@@ -227,7 +239,7 @@ function Object() {
                           whiteSpace: "normal",
                         }}
                       >
-                        {item.result[0].image_url}
+                        {item.result.image_url}
                       </Typography>
                     </Box>
                     <Box sx={{ marginBottom: "0.5rem" }}>
@@ -236,7 +248,7 @@ function Object() {
                       </Typography>
 
                       <Typography variant="body2">
-                        {item.result[0].createdAt}
+                        {item.result.createdAt}
                       </Typography>
                     </Box>
                   </>
@@ -245,10 +257,10 @@ function Object() {
             </Drawer>{" "}
             {item && (
               <Box sx={{ marginLeft: "1rem" }}>
-                <Typography variant="h6">{item.result[0].title}</Typography>
+                <Typography variant="h6">{item.result.title}</Typography>
                 <Typography variant="subtitle2">
-                  by {item.result[0].creator}, {item.result[0].archive} (
-                  {item.result[0].date})
+                  by {item.result.creator}, {item.result.archive} (
+                  {item.result.date})
                 </Typography>
               </Box>
             )}
@@ -261,14 +273,14 @@ function Object() {
                 marginTop: "1rem",
               }}
             >
-              {/*  <Box>
+              <Box>
                 {item && (
                   <Chip
-                    label={`${item.result[0].comments.length} comments`}
+                    label={`${item.result.comments.length} comments`}
                     variant="outlined"
                   />
                 )}
-              </Box> */}
+              </Box>
               <Box>
                 <IconButton onClick={handleShow}>
                   <InfoIcon />
@@ -281,12 +293,12 @@ function Object() {
             <Box>
               <Typography></Typography>
             </Box>
-            {/* <Box sx={{ padding: "5px", marginBottom: "5rem" }}>
+            <Box sx={{ padding: "5px", marginBottom: "10rem" }}>
               {item &&
-                item.result[0].comments.map((element, index) => {
+                item.result.comments.map((element, index) => {
                   return <CommentItem element={element} index={index} />;
                 })}
-            </Box> */}
+            </Box>
             <Box
               sx={{
                 position: "fixed",

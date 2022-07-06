@@ -19,7 +19,7 @@ export const ObjectContextProvider = (props) => {
 
   const createNewObject = async () => {
     let urlencoded = new URLSearchParams();
-    urlencoded.append("user_id", userProfile._id);
+    urlencoded.append("user_id", userProfile.user._id);
     urlencoded.append("title", newObject.title);
     urlencoded.append("date", newObject.date);
     urlencoded.append("creator", newObject.creator);

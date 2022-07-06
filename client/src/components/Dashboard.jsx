@@ -7,11 +7,11 @@ import {
   Grid,
   IconButton,
   Drawer,
+  Divider,
   Chip,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
 import "../App.css";
-import { ProjectFetchContext } from "../context/ProjectFetchContext";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import PostAddIcon from "@mui/icons-material/PostAdd";
@@ -19,7 +19,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { ObjectContext } from "../context/ObjectContext";
 
 export default function Dashboard() {
-  const { projectData } = useContext(ProjectFetchContext);
   const { userProfile } = useContext(AuthContext);
   const { handleNewObjectForm, createNewObject } = useContext(ObjectContext);
   const [open, setOpen] = useState(false);
@@ -32,6 +31,15 @@ export default function Dashboard() {
     flexDirection: "column",
     justifyContent: "center",
     textAlign: "center",
+  };
+
+  const messageDate = (time) => {
+    let date = new Date(time);
+    return date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
   };
 
   return (
@@ -53,7 +61,7 @@ export default function Dashboard() {
             <Box sx={{ textAlign: "center", marginTop: "0.5rem" }}>
               <PostAddIcon fontSize="large" sx={{ color: "#489a8e" }} />
             </Box>
-            <Grid container spacing={2}>
+            <Grid container spacing={0} columns={12}>
               <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                 <TextField
                   variant="standard"
@@ -164,7 +172,6 @@ export default function Dashboard() {
         <Paper elevation={3} id="home-screen">
           <Grid container spacing={2} sx={{ marginLeft: "0.1rem" }}>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-              {" "}
               <Box>
                 {userProfile && (
                   <>
@@ -178,8 +185,8 @@ export default function Dashboard() {
                       }}
                     >
                       <Typography variant="caption" color="text.secondary">
-                        Dashboard / {userProfile.firstName}{" "}
-                        {userProfile.lastName}
+                        Dashboard / {userProfile.user.firstName}{" "}
+                        {userProfile.user.lastName}
                       </Typography>
                       <TextField
                         label="Search"
@@ -200,10 +207,10 @@ export default function Dashboard() {
                         alignItems: "center",
                       }}
                     >
-                      {/* <Box sx={{ marginTop: "1rem", fontSize: "small" }}>
+                      <Box sx={{ marginTop: "1rem", fontSize: "small" }}>
                         Docs:
                         <Chip
-                          label={`${userProfile.object.length}`}
+                          label={`${userProfile.user.object.length}`}
                           variant="outlined"
                           sx={{
                             marginLeft: "0.5rem",
@@ -212,7 +219,7 @@ export default function Dashboard() {
                             borderColor: "#489a8e",
                           }}
                         />
-                      </Box> */}
+                      </Box>
                       <Box
                         sx={{
                           marginTop: "1rem",
@@ -222,7 +229,7 @@ export default function Dashboard() {
                       >
                         Comments:
                         <Chip
-                          label="12"
+                          label={`${userProfile.user.comments.length}`}
                           variant="outlined"
                           sx={{
                             marginLeft: "0.5rem",
@@ -288,6 +295,19 @@ export default function Dashboard() {
               </Box>
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              <Divider>
+                <Chip
+                  label="My Docs"
+                  sx={{
+                    backgroundColor: "#489a8e",
+                    color: "white",
+                    fontSize: "16px",
+                    padding: "1rem",
+                  }}
+                />
+              </Divider>
+            </Grid>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               <Box
                 style={{
                   display: "flex",
@@ -297,16 +317,12 @@ export default function Dashboard() {
                   marginBottom: "4rem",
                 }}
               >
-                {userProfile.object &&
-                  userProfile.object.map((element, i) => {
+                {userProfile.user.object &&
+                  userProfile.user.object.map((element, i) => {
                     return (
-                      <div>
-                        <Box
-                          className="dashboard-box-container"
-                          key={i}
-                          sx={{}}
-                        >
-                          <Link to={`/single-object/${element.date}`}>
+                      <div key={i}>
+                        <Box className="dashboard-box-container">
+                          <Link to={`/single-object/${element._id}`}>
                             <Box
                               sx={{ display: "flex", flexDirection: "column" }}
                             >
@@ -316,9 +332,10 @@ export default function Dashboard() {
                                 <Box>
                                   <img
                                     src={element.image_url}
+                                    alt="Object illustration"
                                     style={{
                                       width: "75px",
-                                      marginRight: "0.5rem",
+                                      marginRight: "1rem",
                                       marginBottom: "0.5rem",
                                     }}
                                   />
@@ -328,7 +345,7 @@ export default function Dashboard() {
                                     variant="caption"
                                     color="text.secondary"
                                   >
-                                    Object
+                                    Document
                                   </Typography>
                                   <Typography variant="body2">
                                     {element.title}
@@ -346,11 +363,11 @@ export default function Dashboard() {
                                     Added on
                                   </Typography>
                                   <Typography variant="body2">
-                                    {element.createdAt}
+                                    {messageDate(element.createdAt)}
                                   </Typography>
                                 </Box>
                               </Box>
-                              <Box>
+                              <Box sx={{ marginTop: "0.5rem" }}>
                                 <Chip
                                   label={`${element.comments.length} comments`}
                                   variant="outlined"

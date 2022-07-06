@@ -25,7 +25,19 @@ const userSchema = new Schema({
       type: String,
     },
   ],
-  object: [],
+  object: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Object",
+    },
+  ],
+
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
 
   /*   imgPath: {
     type: String,

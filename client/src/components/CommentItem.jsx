@@ -1,13 +1,25 @@
 import React from "react";
-import { Box, Typography, Avatar } from "@mui/material";
+import { Box, Typography, Avatar, IconButton } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import CloseIcon from "@mui/icons-material/Close";
 import "../App.css";
 
 function CommentItem(props) {
   const element = props.element;
   const index = props.index;
+
+  const messageDate = (time) => {
+    return new Date(time * 1000).toLocaleTimeString("de-DE", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
   return (
-    <div key={index}>
-      <Box className="comment-item" mb={1}>
+    <div>
+      <Box className="comment-item" mb={1} key={index}>
         <Box
           sx={{
             display: "flex",
@@ -28,12 +40,22 @@ function CommentItem(props) {
               {element.author}
             </Typography>
           </Box>
+          <Box>
+            <IconButton>
+              <EditIcon fontSize="small" />
+            </IconButton>
+            <IconButton>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        </Box>
+
+        <Typography variant="body2">{element.body}</Typography>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Typography variant="caption" color="text.secondary">
             Date
           </Typography>
         </Box>
-
-        <Typography variant="body2">{element.body}</Typography>
       </Box>
     </div>
   );

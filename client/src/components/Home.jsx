@@ -24,14 +24,14 @@ export default function Home() {
   const { userStatus, setUserStatus, token } = useContext(AuthContext);
   let navigate = useNavigate();
 
-  const redirectIfLoggedIn = () => {
+  /*   const redirectIfLoggedIn = () => {
     if (userStatus) {
       navigate("/dashboard");
     }
-  };
+  }; */
 
   useEffect(() => {
-    redirectIfLoggedIn();
+    /* redirectIfLoggedIn(); */
   }, []);
 
   const handleShowSignUp = () => {
@@ -124,7 +124,7 @@ export default function Home() {
       }
 
       console.log("Login result: ", result);
-      navigate("/dashboard");
+
       // TODO: alert for success and error, plus redirection
     } catch (error) {
       console.log("ERROR: User could not be logged in.");

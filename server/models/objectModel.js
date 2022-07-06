@@ -37,6 +37,12 @@ const objectSchema = new Schema(
         ref: "Comment",
       },
     ],
+    likes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Like",
+      },
+    ],
   },
   { timestamps: true }
 );

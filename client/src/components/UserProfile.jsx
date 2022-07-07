@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Typography,
   Box,
-  Paper,
   Button,
   TextField,
   Divider,
@@ -10,9 +10,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Chip,
-  Switch,
-  Zoom,
   Grid,
   FormControlLabel,
   Modal,
@@ -20,6 +17,7 @@ import {
 
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
 
 function UserProfile() {
   const { userProfile, logOut } = useContext(AuthContext);
@@ -28,41 +26,15 @@ function UserProfile() {
   const [updatedInfo, setUpdatedInfo] = useState({});
   const navigate = useNavigate();
 
-  const handleSwitch = () => {
-    if (checked) {
-      setChecked(false);
-      console.log(checked);
-    } else {
-      setChecked(true);
-      console.log(checked);
-    }
-  };
-
   const handleClose = () => setOpen(false);
 
   const handleDelete = () => setOpen(true);
-
-  const modalStyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "max-content",
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 4,
-    borderRadius: "10px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    textAlign: "center",
-  };
 
   // * Delete account
 
   const deleteAccount = async () => {
     let urlencoded = new URLSearchParams();
-    urlencoded.append("email", userProfile.email);
+    urlencoded.append("email", userProfile.user.email);
 
     const requestOptions = {
       method: "DELETE",
@@ -97,10 +69,10 @@ function UserProfile() {
     urlencoded.append("organization", updatedInfo.organization);
     urlencoded.append("project", updatedInfo.project);
     urlencoded.append("role", updatedInfo.role);
-    urlencoded.append("id", userProfile._id);
+    urlencoded.append("id", userProfile.user._id);
 
     const requestOptions = {
-      method: "PUT",
+      method: "PATCH",
       body: urlencoded,
     };
 
@@ -125,11 +97,11 @@ function UserProfile() {
         aria-labelledby="modal confirmation"
         aria-describedby="modal account deletion confirmation"
       >
-        <Box sx={modalStyle}>
+        <Box className="modalStyle">
           <Typography>Permanently delete this account?</Typography>
           {userProfile && (
             <Typography variant="h6" sx={{ marginTop: "1rem" }}>
-              {userProfile.email}
+              {userProfile.user.email}
             </Typography>
           )}
           <Button
@@ -154,7 +126,7 @@ function UserProfile() {
         </Box>
       </Modal>
       <Box style={{ display: "flex", justifyContent: "center" }}>
-        <Paper
+        <Box
           style={{
             display: "flex",
             flexDirection: "row",
@@ -167,22 +139,6 @@ function UserProfile() {
           }}
         >
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-              <Box style={{ textAlign: "end" }}>
-                <FormControlLabel
-                  labelPlacement="start"
-                  label=""
-                  control={
-                    <Switch
-                      checked={checked}
-                      onChange={handleSwitch}
-                      size="small"
-                      style={{ color: "#489a8e" }}
-                    />
-                  }
-                />
-              </Box>
-            </Grid>
             <Grid
               item
               xs={12}
@@ -200,15 +156,15 @@ function UserProfile() {
                 />
               </Box>
               <Box sx={{}}>
-                {userProfile.firstName && (
+                {userProfile.user.firstName && (
                   <Typography variant="h5">
-                    {userProfile.firstName} {userProfile.lastName}{" "}
+                    {userProfile.user.firstName} {userProfile.user.lastName}{" "}
                   </Typography>
                 )}
 
-                {userProfile.organization ? (
+                {userProfile.user.organization ? (
                   <Typography variant="body2" color="text.secondary">
-                    {userProfile.organization}
+                    {userProfile.user.organization}
                   </Typography>
                 ) : (
                   <Typography variant="body2" color="text.secondary">
@@ -217,15 +173,15 @@ function UserProfile() {
                 )}
 
                 <Typography variant="body2" color="text.secondary">
-                  {userProfile.email}
+                  {userProfile.user.email}
                 </Typography>
               </Box>
             </Grid>
             <Grid item xs={12} sm={6} md={6} lg={3} xl={3}>
               <Box style={{ marginLeft: "0.5rem", marginTop: "0.5rem" }}>
                 <Typography variant="subtitle2">Projects</Typography>
-                {userProfile.project ? (
-                  <Typography>{userProfile.project}</Typography>
+                {userProfile.user.project ? (
+                  <Typography>{userProfile.user.project}</Typography>
                 ) : (
                   <Typography>No project selected</Typography>
                 )}
@@ -234,13 +190,29 @@ function UserProfile() {
             <Grid item xs={12} sm={6} md={6} lg={3} xl={3}>
               <Box style={{ marginLeft: "0.5rem", marginTop: "0.5rem" }}>
                 <Typography variant="subtitle2">Objects</Typography>
-                {userProfile.object &&
-                  userProfile.object.map((element, i) => {
-                    return <Typography>{element.title}</Typography>;
-                  })}
+                <Box>
+                  {userProfile.user.object &&
+                    userProfile.user.object.map((element, i) => {
+                      return (
+                        <>
+                          <Link to={`/single-object/${element._id}`}>
+                            <img
+                              src={element.image_url}
+                              alt="Object description"
+                              style={{
+                                height: "50px",
+                                borderRadius: "5px",
+                                marginRight: "0.5rem",
+                              }}
+                            />
+                          </Link>
+                        </>
+                      );
+                    })}
+                </Box>
               </Box>
             </Grid>
-            <Grid item xs={0} sm={0} md={0} lg={4} xl={4}></Grid>
+
             <Grid
               item
               xs={12}
@@ -258,118 +230,108 @@ function UserProfile() {
                   marginTop: "1rem",
                 }}
               >
-                {checked && (
-                  <Zoom in={checked}>
-                    <Box
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                      }}
+                <Box
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Box>
+                    <Divider>
+                      <EditIcon style={{ color: "#489a8e" }} />
+                    </Divider>
+                  </Box>
+                  <TextField
+                    variant="standard"
+                    required
+                    name="firstName"
+                    label="First name"
+                    onChange={handleFormChange}
+                    style={{ margin: "0.5rem" }}
+                  />
+                  <TextField
+                    variant="standard"
+                    required
+                    name="lastName"
+                    label="Last name"
+                    onChange={handleFormChange}
+                    style={{ margin: "0.5rem" }}
+                  />
+                  <TextField
+                    variant="standard"
+                    required
+                    name="organization"
+                    label="Organization"
+                    onChange={handleFormChange}
+                    style={{ margin: "0.5rem" }}
+                  />
+                  <FormControl
+                    variant="standard"
+                    style={{ margin: "0.5rem" }}
+                    required
+                  >
+                    <InputLabel>Project</InputLabel>
+                    <Select
+                      label="Project"
+                      name="project"
+                      onChange={handleFormChange}
+                      defaultValue=""
                     >
-                      <Box>
-                        <Divider>
-                          <Chip
-                            label="Update your profile"
-                            style={{
-                              color: "white",
-                              backgroundColor: "#489a8e",
-                            }}
-                          />
-                        </Divider>
-                      </Box>
-                      <TextField
-                        variant="standard"
-                        required
-                        name="firstName"
-                        label="First name"
-                        onChange={handleFormChange}
-                        style={{ margin: "0.5rem" }}
-                      />
-                      <TextField
-                        variant="standard"
-                        required
-                        name="lastName"
-                        label="Last name"
-                        onChange={handleFormChange}
-                        style={{ margin: "0.5rem" }}
-                      />
-                      <TextField
-                        variant="standard"
-                        required
-                        name="organization"
-                        label="Organization"
-                        onChange={handleFormChange}
-                        style={{ margin: "0.5rem" }}
-                      />
-                      <FormControl
-                        variant="standard"
-                        style={{ margin: "0.5rem" }}
-                        required
-                      >
-                        <InputLabel>Project</InputLabel>
-                        <Select
-                          label="Project"
-                          name="project"
-                          onChange={handleFormChange}
-                          defaultValue=""
-                        >
-                          <MenuItem value="62ac5335d3749757becff764">
-                            Estudios Espanoles
-                          </MenuItem>
-                          <MenuItem value="Climate Governance">
-                            Climate Governance
-                          </MenuItem>
-                          <MenuItem value="Receta del tamal">
-                            La receta del tamal
-                          </MenuItem>
-                        </Select>
-                      </FormControl>
-                      <FormControl
-                        variant="standard"
-                        style={{ margin: "0.5rem" }}
-                        required
-                      >
-                        <InputLabel>Role</InputLabel>
-                        <Select
-                          label="Role"
-                          name="role"
-                          defaultValue=""
-                          onChange={handleFormChange}
-                        >
-                          <MenuItem value="admin">Admin</MenuItem>
-                          <MenuItem value="moderator">Moderator</MenuItem>
-                          <MenuItem value="contributor">Contributor</MenuItem>
-                        </Select>
-                      </FormControl>
-                      <Button
-                        variant="contained"
-                        onClick={updateAccount}
-                        style={{
-                          marginTop: "1.5rem",
-                          backgroundColor: "#489a8e",
-                        }}
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={handleDelete}
-                        style={{
-                          marginTop: "1.5rem",
-                          marginBottom: "3rem",
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </Box>
-                  </Zoom>
-                )}
+                      <MenuItem value="62ac5335d3749757becff764">
+                        Estudios Espanoles
+                      </MenuItem>
+                      <MenuItem value="Climate Governance">
+                        Climate Governance
+                      </MenuItem>
+                      <MenuItem value="Receta del tamal">
+                        La receta del tamal
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    variant="standard"
+                    style={{ margin: "0.5rem" }}
+                    required
+                  >
+                    <InputLabel>Role</InputLabel>
+                    <Select
+                      label="Role"
+                      name="role"
+                      defaultValue=""
+                      onChange={handleFormChange}
+                    >
+                      <MenuItem value="admin">Admin</MenuItem>
+                      <MenuItem value="moderator">Moderator</MenuItem>
+                      <MenuItem value="contributor">Contributor</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <Button
+                    variant="contained"
+                    onClick={updateAccount}
+                    style={{
+                      marginTop: "1.5rem",
+                      backgroundColor: "#489a8e",
+                    }}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={handleDelete}
+                    style={{
+                      marginTop: "1.5rem",
+                      marginBottom: "3rem",
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </Box>
               </Box>
             </Grid>
           </Grid>
-        </Paper>
+        </Box>
       </Box>
     </div>
   );

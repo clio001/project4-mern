@@ -29,7 +29,7 @@ router.get("/foo/:role", queryUsersByRole);
 router.post("/signup", signUp);
 router.post("/login", logIn);
 
-router.put("/update-profile", updateAccount);
+router.patch("/update-profile", updateAccount);
 
 router.delete("/delete", deleteUser);
 

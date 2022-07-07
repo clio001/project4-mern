@@ -39,9 +39,9 @@ const userSchema = new Schema({
     },
   ],
 
-  /*   imgPath: {
+  avatar_url: {
     type: String,
-  }, */
+  },
   /*   project: [
     {
       type: Schema.Types.ObjectId,

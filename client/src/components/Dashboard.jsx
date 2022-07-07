@@ -16,6 +16,8 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import CloseIcon from "@mui/icons-material/Close";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { ObjectContext } from "../context/ObjectContext";
 
 export default function Dashboard() {
@@ -169,7 +171,7 @@ export default function Dashboard() {
             </Box>
           </Box>
         </Drawer>
-        <Paper elevation={3} id="home-screen">
+        <Box>
           <Grid container spacing={2} sx={{ marginLeft: "0.1rem" }}>
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
               <Box>
@@ -269,7 +271,7 @@ export default function Dashboard() {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    alignItems: "baseline",
+                    alignItems: "center",
                   }}
                 >
                   {/*                   <Link to="/new-project">
@@ -287,10 +289,36 @@ export default function Dashboard() {
                       borderColor: "#489a8e",
                       backgroundColor: "#489a8e",
                       color: "white",
+                      marginRight: "1rem",
                     }}
                   >
                     <PostAddIcon />
                   </Button>
+                  <Link to="/">
+                    <Button
+                      variant="contained"
+                      style={{
+                        borderColor: "#489a8e",
+                        backgroundColor: "#489a8e",
+                        color: "white",
+                        marginRight: "1rem",
+                      }}
+                    >
+                      <LibraryBooksIcon />
+                    </Button>
+                  </Link>
+                  <Link to="/user-profile">
+                    <Button
+                      variant="contained"
+                      style={{
+                        borderColor: "#489a8e",
+                        backgroundColor: "#489a8e",
+                        color: "white",
+                      }}
+                    >
+                      <AccountCircleIcon />
+                    </Button>
+                  </Link>
                 </Box>
               </Box>
             </Grid>
@@ -382,7 +410,7 @@ export default function Dashboard() {
               </Box>
             </Grid>
           </Grid>
-        </Paper>
+        </Box>
       </div>
     </>
   );

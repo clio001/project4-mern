@@ -10,8 +10,10 @@ import {
   Drawer,
   Chip,
 } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
+import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
+import SendIcon from "@mui/icons-material/Send";
 import "../App.css";
 import CommentItem from "./CommentItem";
 import { AuthContext } from "../context/AuthContext";
@@ -21,6 +23,7 @@ function Object() {
   const [item, setItem] = useState();
   const [comment, setComment] = useState();
   const [show, setShow] = useState(false);
+
   const { userProfile } = useContext(AuthContext);
 
   const objectID = useParams();
@@ -47,30 +50,6 @@ function Object() {
       console.log("ERROR: Unable to fetch object by date.", error);
     }
   };
-
-  /*   // * DEPRECATED GET Object data
-
-  const getObjectData = async () => {
-    let urlencoded = new URLSearchParams();
-    urlencoded.append("id", "62bd5b50de5e932b21d3f521");
-
-    const requestOptions = {
-      method: "POST",
-      body: urlencoded,
-    };
-
-    try {
-      const response = await fetch(
-        "http://localhost:5001/objects/object-comments",
-        requestOptions
-      );
-      const result = await response.json();
-      console.log("GetObjectComments result: ", result);
-      setItem(result);
-    } catch (error) {
-      console.log("ERROR: Unable to find object data from database.", error);
-    }
-  }; */
 
   // * POST comment to Comments Collection
 
@@ -283,10 +262,13 @@ function Object() {
               </Box>
               <Box>
                 <IconButton onClick={handleShow}>
-                  <InfoIcon />
+                  <InfoOutlinedIcon />
+                </IconButton>
+                <IconButton onClick={handleShow}>
+                  <BookmarkAddOutlinedIcon />
                 </IconButton>
                 <IconButton>
-                  <PictureAsPdfIcon />
+                  <PictureAsPdfOutlinedIcon />
                 </IconButton>
               </Box>
             </Box>
@@ -296,7 +278,15 @@ function Object() {
             <Box sx={{ padding: "5px", marginBottom: "10rem" }}>
               {item &&
                 item.result.comments.map((element, index) => {
-                  return <CommentItem element={element} index={index} />;
+                  return (
+                    <CommentItem
+                      element={element}
+                      index={index}
+                      item={item}
+                      key={index}
+                      retrieve={getObjectByID}
+                    />
+                  );
                 })}
             </Box>
             <Box
@@ -337,7 +327,7 @@ function Object() {
                     }}
                     onClick={postComments}
                   >
-                    Send
+                    <SendIcon />
                   </Button>
                 </span>
               </Paper>

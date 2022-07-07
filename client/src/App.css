@@ -27,10 +27,12 @@ a:visited {
   margin: 0.5rem;
   background-color: white;
   box-shadow: 0px 5px 5px grey;
+  transition: margin-top 300ms;
 }
 
 .dashboard-box-container:hover {
   box-shadow: 0px 5px 15px grey;
+  margin-top: 0rem;
 }
 
 .team-box-container {
@@ -47,8 +49,7 @@ a:visited {
 
 .user-profile-img {
   height: 75px;
-  border-radius: 25px 5px 25px 5px;
-  box-shadow: 0px 0px 10px #489a8e;
+  border-radius: 75px;
 }
 
 /** Object component **/
@@ -61,4 +62,22 @@ a:visited {
   background-color: white;
   padding: 1rem;
   border-radius: 0.2rem;
+}
+
+/** Modal style **/
+
+.modalStyle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px;
+  box-shadow: 24;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }

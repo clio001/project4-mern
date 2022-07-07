@@ -25,7 +25,7 @@ const getObjectByID = async (request, response) => {
   try {
     const result = await Object.findOne({ _id: request.params.id }).populate({
       path: "comments",
-      select: ["author", "body", "user_id"],
+      select: ["author", "body", "user_id", "createdAt", "updatedAt"],
     });
     console.log("Result: ", result);
 

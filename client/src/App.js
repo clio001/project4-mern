@@ -19,6 +19,7 @@ import ViewHelp from "./views/ViewHelp";
 import ViewObject from "./views/ViewObject";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ObjectContextProvider } from "./context/ObjectContext";
+import ViewAllObjects from "./views/ViewAllObjects";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
                 <Route path="about" element={<ViewAbout />} />
                 <Route path="help" element={<ViewHelp />} />
                 <Route path="list" element={<ViewList />} />
+                <Route path="all-objects" element={<ViewAllObjects />} />
                 <Route
                   path="registration"
                   element={<ViewRegistration />}

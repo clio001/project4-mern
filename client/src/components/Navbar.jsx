@@ -20,6 +20,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import GroupIcon from "@mui/icons-material/Group";
 import HelpIcon from "@mui/icons-material/Help";
 import InfoIcon from "@mui/icons-material/Info";
+import FolderIcon from "@mui/icons-material/Folder";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
@@ -61,7 +62,7 @@ export default function Navbar() {
                     <AccountCircleIcon />
                   </ListItemIcon>
                   <ListItemText style={{ color: "grey" }}>
-                    User account
+                    Manage account
                   </ListItemText>
                 </MenuItem>
               </Link>
@@ -72,6 +73,16 @@ export default function Navbar() {
                   </ListItemIcon>
                   <ListItemText style={{ color: "grey" }}>
                     Dashboard
+                  </ListItemText>
+                </MenuItem>
+              </Link>
+              <Link to="/all-objects">
+                <MenuItem>
+                  <ListItemIcon>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText style={{ color: "grey" }}>
+                    Browse Docs
                   </ListItemText>
                 </MenuItem>
               </Link>

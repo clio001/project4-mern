@@ -18,11 +18,13 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import CloseIcon from "@mui/icons-material/Close";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import { ObjectContext } from "../context/ObjectContext";
 
 export default function Dashboard() {
   const { userProfile } = useContext(AuthContext);
-  const { handleNewObjectForm, createNewObject } = useContext(ObjectContext);
+  const { handleNewObjectForm, createNewObject, handleSelectedImage } =
+    useContext(ObjectContext);
   const [open, setOpen] = useState(false);
 
   const handleClose = () => setOpen(false);
@@ -63,7 +65,7 @@ export default function Dashboard() {
             <Box sx={{ textAlign: "center", marginTop: "0.5rem" }}>
               <PostAddIcon fontSize="large" sx={{ color: "#489a8e" }} />
             </Box>
-            <Grid container spacing={0} columns={12}>
+            <Grid container spacing={1} columns={12}>
               <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                 <TextField
                   variant="standard"
@@ -138,26 +140,33 @@ export default function Dashboard() {
               <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                 <TextField
                   variant="standard"
-                  name="image_url"
-                  label="Image"
-                  onChange={handleNewObjectForm}
-                  style={{ width: "70%" }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-                <TextField
-                  variant="standard"
                   required
+                  multiline
                   name="description"
                   label="Description"
                   onChange={handleNewObjectForm}
                   style={{ width: "70%" }}
                 />
               </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                {" "}
+                <Box sx={{ marginLeft: "0.5rem", marginTop: "0.8rem" }}>
+                  <Typography variant="subtitle1" color="text.secondary">
+                    Upload image:
+                  </Typography>
+                </Box>
+                <TextField
+                  variant="outlined"
+                  type="file"
+                  name="image_URL"
+                  label=""
+                  style={{ width: "70%", marginTop: "1rem" }}
+                  onChange={handleSelectedImage}
+                />
+              </Grid>
             </Grid>
             <Box>
               <Button
-                type="submit"
                 variant="contained"
                 onClick={createNewObject}
                 style={{
@@ -210,13 +219,10 @@ export default function Dashboard() {
                       }}
                     >
                       <Box sx={{ marginTop: "1rem", fontSize: "small" }}>
-                        Docs:
                         <Chip
-                          label={`${userProfile.user.object.length}`}
+                          label={`Docs: ${userProfile.user.object.length}`}
                           variant="outlined"
                           sx={{
-                            marginLeft: "0.5rem",
-
                             color: "#489a8e",
                             borderColor: "#489a8e",
                           }}
@@ -229,9 +235,8 @@ export default function Dashboard() {
                           fontSize: "small",
                         }}
                       >
-                        Comments:
                         <Chip
-                          label={`${userProfile.user.comments.length}`}
+                          label={`Comments: ${userProfile.user.comments.length}`}
                           variant="outlined"
                           sx={{
                             marginLeft: "0.5rem",
@@ -247,9 +252,8 @@ export default function Dashboard() {
                           fontSize: "small",
                         }}
                       >
-                        Likes:
                         <Chip
-                          label="24"
+                          label={`Bookmarks: ${userProfile.user.bookmarks.length}`}
                           variant="outlined"
                           sx={{
                             marginLeft: "0.5rem",
@@ -294,7 +298,7 @@ export default function Dashboard() {
                   >
                     <PostAddIcon />
                   </Button>
-                  <Link to="/">
+                  <Link to="/all-objects">
                     <Button
                       variant="contained"
                       style={{
@@ -342,7 +346,7 @@ export default function Dashboard() {
                   flexDirection: "row",
                   flexWrap: "wrap",
                   justifyContent: "flex-start",
-                  marginBottom: "4rem",
+                  marginBottom: "2rem",
                 }}
               >
                 {userProfile.user.object &&
@@ -407,6 +411,65 @@ export default function Dashboard() {
                       </div>
                     );
                   })}
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              <Divider>
+                <Chip
+                  label="My Bookmarks"
+                  sx={{
+                    backgroundColor: "#489a8e",
+                    color: "white",
+                    fontSize: "16px",
+                    padding: "1rem",
+                  }}
+                />
+              </Divider>
+            </Grid>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              <Box
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "flex-start",
+                  marginBottom: "4rem",
+                }}
+              >
+                {userProfile.user.bookmarks &&
+                userProfile.user.bookmarks.length === 0 ? (
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Typography variant="body2" color="text.secondary">
+                      Click{" "}
+                    </Typography>
+                    <BookmarkAddOutlinedIcon />
+                    <Typography variant="body2" color="text.secondary">
+                      {" "}
+                      to add docs to your bookmarks.
+                    </Typography>
+                  </Box>
+                ) : (
+                  userProfile.user.bookmarks.map((element, i) => {
+                    return (
+                      <div key={i}>
+                        <Box>
+                          <Link to={`/single-object/${element.object_id._id}`}>
+                            <Box className="dashboard-box-container-bookmark">
+                              {" "}
+                              <img
+                                src={element.object_id.image_url}
+                                alt="Object illustration"
+                                style={{
+                                  width: "75px",
+                                }}
+                              />
+                            </Box>
+                          </Link>
+                        </Box>
+                      </div>
+                    );
+                  })
+                )}
               </Box>
             </Grid>
           </Grid>

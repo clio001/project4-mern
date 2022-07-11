@@ -2,6 +2,13 @@ import User from "../models/userModel.js";
 import encryptPassword from "../utils/encryptedPassword.js";
 import { verifyPassword } from "../utils/encryptedPassword.js";
 import { issueToken } from "../utils/jwt.js";
+import passport from "passport";
+import GoogleStrategy from "passport-google-oidc";
+import * as dotenv from "dotenv";
+import { v2 as cloudinary } from "cloudinary";
+
+// * loading .env file
+dotenv.config();
 
 // * Function to retrieve all users
 const findAllUsers = async (request, response) => {
@@ -176,6 +183,24 @@ const getProfile = async (request, response) => {
         "createdAt",
         "updatedAt",
       ],
+    })
+    .populate({
+      path: "bookmarks",
+      select: ["_id", "user_id", "object_id", "createdAt", "updatedAt"],
+    })
+    .populate({
+      path: "bookmarks",
+      populate: {
+        path: "object_id",
+        model: "Object",
+      },
+    })
+    .populate({
+      path: "bookmarks",
+      populate: {
+        path: "user_id",
+        model: "User",
+      },
     });
 
   response.status(200).json({
@@ -250,6 +275,36 @@ const findUserByName = async (request, response) => {
   }
 };
 
+const googleLogin = async (request, response) => {};
+
+// * Image upload
+
+const imageUpload = async (request, response) => {
+  console.log("request.body", request.body);
+  try {
+    console.log("request.file", request.file); // Multer stores the file in the request.file property
+    const resultUpload = await cloudinary.uploader.upload(request.file.path, {
+      folder: "docHub-avatars",
+    });
+    console.log("Result of image upload: ", resultUpload);
+
+    const resultUser = await User.findByIdAndUpdate(request.body.user_id, {
+      avatar_url: resultUpload.url,
+    });
+
+    response.status(200).json({
+      message: "SUCCESS: Image successfully uploaded.",
+      image_URL: resultUpload.url,
+      resultUser,
+    });
+  } catch (error) {
+    response.status(500).json({
+      message: "ERROR: Image not uploaded.",
+      error,
+    });
+  }
+};
+
 export {
   findAllUsers,
   findUsersByRole,
@@ -257,7 +312,9 @@ export {
   findUserByName,
   signUp,
   logIn,
+  googleLogin,
   getProfile,
   deleteUser,
   updateAccount,
+  imageUpload,
 };

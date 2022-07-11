@@ -1,5 +1,6 @@
 import Object from "../models/objectModel.js";
 import User from "../models/userModel.js";
+import { v2 as cloudinary } from "cloudinary";
 
 // * GET all objects
 
@@ -23,10 +24,15 @@ const getAllObjects = async (request, response) => {
 
 const getObjectByID = async (request, response) => {
   try {
-    const result = await Object.findOne({ _id: request.params.id }).populate({
-      path: "comments",
-      select: ["author", "body", "user_id", "createdAt", "updatedAt"],
-    });
+    const result = await Object.findOne({ _id: request.params.id })
+      .populate({
+        path: "comments",
+        select: ["author", "body", "user_id", "createdAt", "updatedAt"],
+      })
+      .populate({
+        path: "bookmarks",
+        select: ["_id", "user_id", "object_id", "createdAt", "updatedAt"],
+      });
     console.log("Result: ", result);
 
     response.status(200).json({
@@ -88,6 +94,29 @@ const postNewObject = async (request, response) => {
   }
 };
 
+// * Upload object image
+
+const uploadImage = async (request, response) => {
+  console.log("Request body object img upload: ", request.body);
+  try {
+    console.log("Request file: ", request.file);
+    const resultUpload = await cloudinary.uploader.upload(request.file.path, {
+      folder: "docHub-objects",
+    });
+    console.log("Result of object img upload: ", resultUpload);
+    response.status(201).json({
+      message: "SUCCESS: Object image successfully uploaded.",
+      resultUpload,
+      image_URL: resultUpload.url,
+    });
+  } catch (error) {
+    response.status(500).json({
+      message: "ERROR: Unable to upload object image.",
+      error,
+    });
+  }
+};
+
 // * Retrieve comments from object
 
 const getComments = async (request, response) => {
@@ -143,4 +172,5 @@ export {
   postNewObject,
   getComments,
   postComment,
+  uploadImage,
 };

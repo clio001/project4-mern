@@ -8,6 +8,7 @@ import {
   Modal,
   Snackbar,
   Button,
+  FormControl,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
@@ -175,7 +176,7 @@ function CommentItem(props) {
             }}
           >
             <Avatar
-              src="http://www.johnwoitkowitz.de/3813184d-3.jpg"
+              src={userProfile.user.avatar_url}
               alt="user image"
               sx={{ marginRight: "0.5rem" }}
             />
@@ -201,32 +202,38 @@ function CommentItem(props) {
             marginTop: "0.5rem",
           }}
         >
-          <Typography variant="caption" color="text.secondary">
-            {messageDate(element.createdAt)}
-          </Typography>
+          {element.createdAt === element.updatedAt ? (
+            <Typography variant="caption" color="text.secondary">
+              {messageDate(element.createdAt)}
+            </Typography>
+          ) : (
+            <Typography variant="caption" color="text.secondary">
+              Last edited: {messageDate(element.updatedAt)}
+            </Typography>
+          )}
         </Box>
       </Box>
       <Snackbar
         open={openSuccess}
-        autoHideDuration={5000}
+        autoHideDuration={2500}
         onClose={handleClose}
         message="Comment deleted!"
       />
       <Snackbar
         open={openFailure}
-        autoHideDuration={5000}
+        autoHideDuration={2500}
         onClose={handleClose}
         message="Unable to delete comment. Try again!"
       />
       <Snackbar
         open={openSuccessEdit}
-        autoHideDuration={5000}
+        autoHideDuration={2500}
         onClose={handleClose}
         message="Comment edited!"
       />
       <Snackbar
         open={openErrorEdit}
-        autoHideDuration={5000}
+        autoHideDuration={2500}
         onClose={handleClose}
         message="Error editing comment. Try again!"
       />

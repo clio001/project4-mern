@@ -5,13 +5,14 @@ import {
   Box,
   Button,
   TextField,
+  Input,
   Divider,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   Grid,
-  FormControlLabel,
+  Avatar,
   Modal,
 } from "@mui/material";
 
@@ -24,11 +25,45 @@ function UserProfile() {
   const [checked, setChecked] = useState(false);
   const [open, setOpen] = useState(false);
   const [updatedInfo, setUpdatedInfo] = useState({});
+  const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate();
 
   const handleClose = () => setOpen(false);
-
   const handleDelete = () => setOpen(true);
+
+  // * Set file object (name, size, type, last changed) to selectedFile state variable
+
+  const handleSelectedFile = (e) => {
+    console.log("Selected file: ", e.target.files);
+    setSelectedFile(e.target.files[0]);
+  };
+
+  // * Upload function for image file => moved into Update User function to save updated information and upload file at the same time
+
+  /* const uploadImage = async (e) => {
+    e.preventDefault();
+    let formData = new FormData();
+    formData.append("image", selectedFile);
+    formData.append("user_id", userProfile.user._id);
+
+    const requestOptions = {
+      method: "POST",
+      body: formData,
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:5001/users/upload-image",
+        requestOptions
+      );
+      const result = await response.json();
+      console.log("Result of image upload: ", result);
+      setUpdatedInfo({ avatar_url: result.image_URL });
+      console.log(updatedInfo);
+    } catch (error) {
+      console.log("ERROR: Unable to upload image file.");
+    }
+  }; */
 
   // * Delete account
 
@@ -62,7 +97,29 @@ function UserProfile() {
     setUpdatedInfo({ ...updatedInfo, [event.target.name]: event.target.value });
     console.log(updatedInfo);
   };
-  const updateAccount = async () => {
+  const updateAccount = async (e) => {
+    e.preventDefault();
+    let formData = new FormData();
+    formData.append("image", selectedFile);
+    formData.append("user_id", userProfile.user._id);
+
+    const requestImageOptions = {
+      method: "POST",
+      body: formData,
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:5001/users/upload-image",
+        requestImageOptions
+      );
+      const result = await response.json();
+      console.log("Result of image upload: ", result);
+      setUpdatedInfo({ avatar_url: result.image_URL });
+    } catch (error) {
+      console.log("ERROR: Unable to upload image file.");
+    }
+
     let urlencoded = new URLSearchParams();
     urlencoded.append("firstName", updatedInfo.firstName);
     urlencoded.append("lastName", updatedInfo.lastName);
@@ -149,9 +206,9 @@ function UserProfile() {
               style={{ display: "flex", flexDirection: "row" }}
             >
               <Box style={{ marginRight: "1rem" }}>
-                <img
-                  src="http://www.johnwoitkowitz.de/3813184d-3.jpg"
-                  className="user-profile-img"
+                <Avatar
+                  sx={{ width: 75, height: 75 }}
+                  src={userProfile.user.avatar_url}
                   alt="User profile"
                 />
               </Box>
@@ -179,22 +236,24 @@ function UserProfile() {
             </Grid>
             <Grid item xs={12} sm={6} md={6} lg={3} xl={3}>
               <Box style={{ marginLeft: "0.5rem", marginTop: "0.5rem" }}>
-                <Typography variant="subtitle2">Projects</Typography>
-                {userProfile.user.project ? (
-                  <Typography>{userProfile.user.project}</Typography>
+                <Typography variant="subtitle2">Role</Typography>
+                {userProfile.user.role ? (
+                  <Typography variant="body2" color="text.secondary">
+                    {userProfile.user.role}
+                  </Typography>
                 ) : (
-                  <Typography>No project selected</Typography>
+                  <Typography>No role selected</Typography>
                 )}
               </Box>
             </Grid>
             <Grid item xs={12} sm={6} md={6} lg={3} xl={3}>
               <Box style={{ marginLeft: "0.5rem", marginTop: "0.5rem" }}>
                 <Typography variant="subtitle2">Objects</Typography>
-                <Box>
+                <Box sx={{ display: "flex" }}>
                   {userProfile.user.object &&
                     userProfile.user.object.map((element, i) => {
                       return (
-                        <>
+                        <div key={i}>
                           <Link to={`/single-object/${element._id}`}>
                             <img
                               src={element.image_url}
@@ -206,7 +265,7 @@ function UserProfile() {
                               }}
                             />
                           </Link>
-                        </>
+                        </div>
                       );
                     })}
                 </Box>
@@ -271,29 +330,6 @@ function UserProfile() {
                     style={{ margin: "0.5rem" }}
                     required
                   >
-                    <InputLabel>Project</InputLabel>
-                    <Select
-                      label="Project"
-                      name="project"
-                      onChange={handleFormChange}
-                      defaultValue=""
-                    >
-                      <MenuItem value="62ac5335d3749757becff764">
-                        Estudios Espanoles
-                      </MenuItem>
-                      <MenuItem value="Climate Governance">
-                        Climate Governance
-                      </MenuItem>
-                      <MenuItem value="Receta del tamal">
-                        La receta del tamal
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                  <FormControl
-                    variant="standard"
-                    style={{ margin: "0.5rem" }}
-                    required
-                  >
                     <InputLabel>Role</InputLabel>
                     <Select
                       label="Role"
@@ -301,11 +337,24 @@ function UserProfile() {
                       defaultValue=""
                       onChange={handleFormChange}
                     >
-                      <MenuItem value="admin">Admin</MenuItem>
-                      <MenuItem value="moderator">Moderator</MenuItem>
-                      <MenuItem value="contributor">Contributor</MenuItem>
+                      <MenuItem value="Admin">Admin</MenuItem>
+                      <MenuItem value="Contributor">Contributor</MenuItem>
                     </Select>
                   </FormControl>
+                  <Box sx={{ marginLeft: "0.5rem", marginTop: "0.8rem" }}>
+                    <Typography variant="subtitle1" color="text.secondary">
+                      Add image:
+                    </Typography>
+                  </Box>
+                  <TextField
+                    variant="outlined"
+                    type="file"
+                    name="image_URL"
+                    label=""
+                    style={{ margin: "0.5rem" }}
+                    onChange={handleSelectedFile}
+                  />
+
                   <Button
                     variant="contained"
                     onClick={updateAccount}

@@ -134,7 +134,7 @@ export default function Home() {
   };
 
   return (
-    <div id="home-screen">
+    <div id="landing-screen">
       <Collapse in={successAlert}>
         <Alert severity="success">
           Success! Please, log in to your account.
@@ -311,12 +311,22 @@ export default function Home() {
                     className="button"
                     style={{
                       marginTop: "1.5rem",
+                      marginBottom: "1rem",
                       borderColor: "#489a8e",
                       color: "#489a8e",
                     }}
                   >
                     Sign up
                   </Button>
+                  <a
+                    href="http://localhost:5001/users/google-login"
+                    className="button-google"
+                  >
+                    {" "}
+                    <Typography variant="button" fontSize="small">
+                      Log in with Google
+                    </Typography>
+                  </a>
                 </Box>
               </Box>
             </Box>

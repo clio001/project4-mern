@@ -14,6 +14,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import SendIcon from "@mui/icons-material/Send";
+import BookmarkRemoveOutlinedIcon from "@mui/icons-material/BookmarkRemoveOutlined";
 import "../App.css";
 import CommentItem from "./CommentItem";
 import { AuthContext } from "../context/AuthContext";
@@ -57,7 +58,7 @@ function Object() {
     setComment(e.target.value);
   };
 
-  const postComments = async () => {
+  const postComments = async (e) => {
     let urlencoded = new URLSearchParams();
     urlencoded.append(
       "author",
@@ -79,12 +80,74 @@ function Object() {
       );
       const result = await response.json();
       console.log("Result posting comment: ", result);
-
+      const inputValue = document.getElementById("userInputValue");
+      inputValue.value = "";
       getObjectByID();
     } catch (error) {
       console.log("ERROR posting comment.", error);
     }
     window.scrollTo(0, document.body.scrollHeight);
+  };
+
+  // * POST create new bookmark in Bookmarks collection and update Objects and Users collections
+  const createBookmark = async () => {
+    let urlencoded = new URLSearchParams();
+    urlencoded.append("object_id", item.result._id);
+    urlencoded.append("user_id", userProfile.user._id);
+
+    const requestOptions = {
+      method: "POST",
+      body: urlencoded,
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:5001/bookmarks/create-bookmark",
+        requestOptions
+      );
+      const result = await response.json();
+      console.log(
+        "SUCCESS: Post fetch request to create new bookmark successfull.",
+        result
+      );
+    } catch (error) {
+      console.log(
+        "ERROR: Unable to execute post fetch request to create new bookmark.",
+        error
+      );
+    }
+  };
+
+  // * DELETE bookmark from Bookmarks, Objects, and Users collections
+  const deleteBookmark = async () => {
+    let urlencoded = new URLSearchParams();
+    urlencoded.append("user_id", userProfile.user._id);
+    urlencoded.append("object_id", item.result._id);
+    const bookmark_id = item.result.bookmarks.map((element) => {
+      if (userProfile.user._id === element.user_id) {
+        return element._id;
+      }
+    });
+    urlencoded.append("bookmark_id", bookmark_id);
+
+    const requestOptions = {
+      method: "DELETE",
+      body: urlencoded,
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:5001/bookmarks/delete-bookmark",
+        requestOptions
+      );
+      const result = await response.json();
+      console.log("Result of deleting bookmark: ", result);
+    } catch (error) {
+      console.log(
+        "ERROR: Unable to execute post fetch request to delete bookmark.",
+        error
+      );
+    }
   };
 
   useEffect(() => {
@@ -264,9 +327,26 @@ function Object() {
                 <IconButton onClick={handleShow}>
                   <InfoOutlinedIcon />
                 </IconButton>
-                <IconButton onClick={handleShow}>
-                  <BookmarkAddOutlinedIcon />
-                </IconButton>
+                {item && userProfile && item.result.bookmarks.length === 0 ? (
+                  <IconButton onClick={createBookmark}>
+                    <BookmarkAddOutlinedIcon />
+                  </IconButton>
+                ) : (
+                  item &&
+                  userProfile &&
+                  item.result.bookmarks.map((element) => {
+                    return userProfile.user._id === element.user_id ? (
+                      <IconButton onClick={deleteBookmark}>
+                        <BookmarkRemoveOutlinedIcon />
+                      </IconButton>
+                    ) : (
+                      <IconButton onClick={createBookmark}>
+                        <BookmarkAddOutlinedIcon />
+                      </IconButton>
+                    );
+                  })
+                )}
+
                 <IconButton>
                   <PictureAsPdfOutlinedIcon />
                 </IconButton>
@@ -304,13 +384,15 @@ function Object() {
                   display: "flex",
                   alignItems: "center",
                   width: "100%",
-                  height: "3rem",
+                  height: "max-content",
                   paddingTop: "0.5rem",
                   paddingBottom: "0.5rem",
                   border: "1px",
                 }}
               >
                 <InputBase
+                  multiline
+                  maxRows={5}
                   id="userInputValue"
                   sx={{ ml: 2, flex: 1 }}
                   placeholder="New message ..."

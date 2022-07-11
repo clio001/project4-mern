@@ -37,6 +37,12 @@ const objectSchema = new Schema(
         ref: "Comment",
       },
     ],
+    bookmarks: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Bookmark",
+      },
+    ],
     likes: [
       {
         type: Schema.Types.ObjectId,

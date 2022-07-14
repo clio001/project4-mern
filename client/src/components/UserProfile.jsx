@@ -19,6 +19,9 @@ import {
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
+import LocalPoliceOutlinedIcon from "@mui/icons-material/LocalPoliceOutlined";
+import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
+import ReturnButton from "./ReturnButton";
 
 function UserProfile() {
   const { userProfile, logOut } = useContext(AuthContext);
@@ -182,6 +185,17 @@ function UserProfile() {
           </Button>
         </Box>
       </Modal>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginRight: "1rem",
+          paddingTop: "1rem",
+        }}
+      >
+        <ReturnButton />
+      </Box>
+
       <Box style={{ display: "flex", justifyContent: "center" }}>
         <Box
           style={{
@@ -212,12 +226,26 @@ function UserProfile() {
                   alt="User profile"
                 />
               </Box>
-              <Box sx={{}}>
-                {userProfile.user.firstName && (
-                  <Typography variant="h5">
-                    {userProfile.user.firstName} {userProfile.user.lastName}{" "}
-                  </Typography>
-                )}
+              <Box>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  {userProfile.user.firstName && (
+                    <Typography variant="h5">
+                      {userProfile.user.firstName} {userProfile.user.lastName}{" "}
+                    </Typography>
+                  )}
+                  {userProfile.user.role === "Admin" && (
+                    <LocalPoliceOutlinedIcon
+                      fontSize="small"
+                      sx={{ color: "gray", marginLeft: "0.5rem" }}
+                    />
+                  )}
+                  {userProfile.user.comments.length > 9 && (
+                    <WorkspacePremiumOutlinedIcon
+                      fontSize="small"
+                      sx={{ color: "gray", marginLeft: "0.5rem" }}
+                    />
+                  )}
+                </Box>
 
                 {userProfile.user.organization ? (
                   <Typography variant="body2" color="text.secondary">
@@ -234,7 +262,7 @@ function UserProfile() {
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={3} xl={3}>
+            <Grid item xs={4} sm={6} md={6} lg={3} xl={3}>
               <Box style={{ marginLeft: "0.5rem", marginTop: "0.5rem" }}>
                 <Typography variant="subtitle2">Role</Typography>
                 {userProfile.user.role ? (
@@ -246,10 +274,16 @@ function UserProfile() {
                 )}
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={3} xl={3}>
+            <Grid item xs={8} sm={6} md={6} lg={3} xl={3}>
               <Box style={{ marginLeft: "0.5rem", marginTop: "0.5rem" }}>
                 <Typography variant="subtitle2">Objects</Typography>
-                <Box sx={{ display: "flex" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                  }}
+                >
                   {userProfile.user.object &&
                     userProfile.user.object.map((element, i) => {
                       return (

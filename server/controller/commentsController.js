@@ -23,11 +23,13 @@ const getAllComments = async (request, response) => {
 
 const createComment = async (request, response) => {
   try {
+    const getUserObjectId = await User.findOne({ _id: request.body.user_id });
+
     const result = await Comment.create({
       author: request.body.author,
       body: request.body.comment,
       object_id: request.body.object_id,
-      user_id: request.body.user_id,
+      user_id: getUserObjectId,
     });
 
     const pushIDToObject = await Object.findByIdAndUpdate(

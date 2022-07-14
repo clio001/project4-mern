@@ -49,6 +49,9 @@ const objectSchema = new Schema(
         ref: "Like",
       },
     ],
+    createdBy: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

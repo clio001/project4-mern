@@ -8,10 +8,14 @@ import {
   Slide,
   Collapse,
   Alert,
+  Chip,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { ObjectContext } from "../context/ObjectContext";
+import { CommentContext } from "../context/CommentContext";
+import { UserContext } from "../context/UserContext";
 
 export default function Home() {
   const [loggedInUser, setLoggedInUser] = useState({});
@@ -22,6 +26,9 @@ export default function Home() {
   const [warningAlert, setWarningAlert] = useState(false);
   const [loginFailAlert, setLoginFailAlert] = useState(false);
   const { userStatus, setUserStatus, token } = useContext(AuthContext);
+  const { allObjects } = useContext(ObjectContext);
+  const { allComments } = useContext(CommentContext);
+  const { allUsers } = useContext(UserContext);
   let navigate = useNavigate();
 
   /*   const redirectIfLoggedIn = () => {
@@ -158,6 +165,7 @@ export default function Home() {
           justifyContent: "space-evenly",
           alignItems: "center",
           height: "100%",
+          marginTop: "2rem",
         }}
       >
         <Box
@@ -169,14 +177,117 @@ export default function Home() {
             paddingBottom: "2rem",
           }}
         >
-          <Typography variant="h1">
-            <span style={{ fontFamily: "Courier" }}>Doc</span>
-            <span style={{ fontSize: "5rem", color: "white" }}>Hub</span>
-          </Typography>
-          <Typography variant="subtitle1" style={{ color: "#eeeeee" }}>
-            A platform for collaborative research
-          </Typography>
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Typography variant="h1">
+              <span style={{ fontFamily: "Courier" }}>Doc</span>
+              <span style={{ fontSize: "5rem", color: "white" }}>Hub</span>
+            </Typography>
+            <Typography variant="h6" style={{ color: "white" }}>
+              A platform for collaborative work
+            </Typography>
+          </Box>
+          {allObjects && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+
+                marginTop: "1rem",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  marginRight: "2rem",
+                }}
+              >
+                {allUsers && (
+                  <Box>
+                    <Chip
+                      label={allUsers.length}
+                      fontSize="large"
+                      sx={{
+                        color: "white",
+                        border: "solid 1px white",
+                        fontSize: "16px",
+
+                        opacity: "0.9",
+                      }}
+                    />
+                  </Box>
+                )}
+
+                <Typography variant="button" color="text.secondary">
+                  Users
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginRight: "2rem",
+                  alignItems: "center",
+                }}
+              >
+                <Box>
+                  <Chip
+                    label={allObjects.allObjects.length}
+                    fontSize="large"
+                    sx={{
+                      color: "white",
+                      border: "solid 1px white",
+                      fontSize: "16px",
+
+                      opacity: "0.9",
+                    }}
+                  />
+                </Box>
+
+                <Typography variant="button" color="text.secondary">
+                  Docs
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                {allComments && (
+                  <Box>
+                    <Chip
+                      label={allComments.result.length}
+                      fontSize="large"
+                      sx={{
+                        color: "white",
+                        border: "solid 1px white",
+                        fontSize: "16px",
+
+                        opacity: "0.9",
+                      }}
+                    />
+                  </Box>
+                )}
+
+                <Typography variant="button" color="text.secondary">
+                  Comments
+                </Typography>
+              </Box>
+            </Box>
+          )}
         </Box>
+
         {/* LOGIN */}
         {showSignUp ? (
           <Slide direction="up" mountOnEnter unmountOnExit in={showSignUp}>

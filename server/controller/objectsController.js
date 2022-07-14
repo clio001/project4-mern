@@ -32,7 +32,15 @@ const getObjectByID = async (request, response) => {
       .populate({
         path: "bookmarks",
         select: ["_id", "user_id", "object_id", "createdAt", "updatedAt"],
-      });
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user_id",
+          model: "User",
+        },
+      })
+      .exec();
     console.log("Result: ", result);
 
     response.status(200).json({
@@ -50,6 +58,7 @@ const getObjectByID = async (request, response) => {
 // * POST new object
 
 const postNewObject = async (request, response) => {
+  console.log("Request body: ", request.body);
   try {
     const existingObject = await Object.exists({ title: request.body.title });
     if (existingObject) {
@@ -103,7 +112,7 @@ const uploadImage = async (request, response) => {
     const resultUpload = await cloudinary.uploader.upload(request.file.path, {
       folder: "docHub-objects",
     });
-    console.log("Result of object img upload: ", resultUpload);
+
     response.status(201).json({
       message: "SUCCESS: Object image successfully uploaded.",
       resultUpload,
@@ -122,11 +131,33 @@ const uploadImage = async (request, response) => {
 const getComments = async (request, response) => {
   const isObject = await Object.exists({ _id: request.body.id });
   if (isObject) {
-    const result = await Object.where("_id")
-      .equals(isObject)
-      .select(
-        "title creator date description type archive rights web_url image_url createdAt comments"
-      );
+    const result = await Object.findOne({ _id: isObject })
+      .populate({
+        path: "comments",
+        select: ["author", "body", "object_id", "user_id"],
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user_id",
+          model: "User",
+        },
+        select: [
+          "title",
+          "creator",
+          "date",
+          "description",
+          "type",
+          "archive",
+          "rights",
+          "web_url",
+          "image_url",
+          "createdAt",
+          "comments",
+        ],
+      })
+      .exec();
+
     response.status(200).json({
       message: "SUCCESS: Comments retrieved.",
       result,

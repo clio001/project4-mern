@@ -1,7 +1,7 @@
 import {
   Typography,
   Box,
-  Paper,
+  Snackbar,
   Button,
   TextField,
   Grid,
@@ -22,12 +22,24 @@ import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import { ObjectContext } from "../context/ObjectContext";
 
 export default function Dashboard() {
-  const { userProfile } = useContext(AuthContext);
-  const { handleNewObjectForm, createNewObject, handleSelectedImage } =
-    useContext(ObjectContext);
-  const [open, setOpen] = useState(false);
+  const { userProfile, getProfileData } = useContext(AuthContext);
+  const {
+    handleNewObjectForm,
+    createNewObject,
+    handleSelectedImage,
+    open,
+    setOpen,
+    snackSuccess,
+    snackError,
+    setSnackSuccess,
+    setSnackError,
+  } = useContext(ObjectContext);
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setSnackSuccess(false);
+    setSnackError(false);
+  };
   const handleNewObject = () => setOpen(true);
 
   const drawerStyle = {
@@ -48,7 +60,19 @@ export default function Dashboard() {
 
   return (
     <>
-      <div id="home-screen">
+      <div id="landing-screen">
+        <Snackbar
+          open={snackSuccess}
+          autoHideDuration={2500}
+          onClose={handleClose}
+          message="Doc created!"
+        />
+        <Snackbar
+          open={snackError}
+          autoHideDuration={2500}
+          onClose={handleClose}
+          message="Unable to create doc ..."
+        />
         <Drawer
           anchor="top"
           variant="temporary"
@@ -181,8 +205,8 @@ export default function Dashboard() {
           </Box>
         </Drawer>
         <Box>
-          <Grid container spacing={2} sx={{ marginLeft: "0.1rem" }}>
-            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+          <Grid container spacing={0} sx={{ marginLeft: "0.1rem" }}>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               <Box>
                 {userProfile && (
                   <>
@@ -192,30 +216,37 @@ export default function Dashboard() {
                         flexDirection: "row",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        marginBottom: "1rem",
+                        margin: "1rem",
                       }}
                     >
                       <Typography variant="caption" color="text.secondary">
                         Dashboard / {userProfile.user.firstName}{" "}
                         {userProfile.user.lastName}
                       </Typography>
-                      <TextField
+                      {/*  <TextField
                         label="Search"
                         variant="standard"
                         sx={{ pr: "1rem" }}
                         size="small"
                       >
                         Search
-                      </TextField>
+                      </TextField> */}
                     </Box>{" "}
-                    <Typography variant="h3" component="h2">
-                      Dashboard
-                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginBottom: "1.5rem",
+                      }}
+                    >
+                      <Typography variant="h3">Dashboard</Typography>
+                    </Box>
                     <Box
                       sx={{
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
+                        justifyContent: "center",
                       }}
                     >
                       <Box sx={{ marginTop: "1rem", fontSize: "small" }}>
@@ -224,6 +255,8 @@ export default function Dashboard() {
                           variant="outlined"
                           sx={{
                             color: "#489a8e",
+                            backgroundColor: "white",
+                            opacity: "0.9",
                             borderColor: "#489a8e",
                           }}
                         />
@@ -240,6 +273,8 @@ export default function Dashboard() {
                           variant="outlined"
                           sx={{
                             marginLeft: "0.5rem",
+                            backgroundColor: "white",
+                            opacity: "0.9",
                             color: "#489a8e",
                             borderColor: "#489a8e",
                           }}
@@ -257,7 +292,8 @@ export default function Dashboard() {
                           variant="outlined"
                           sx={{
                             marginLeft: "0.5rem",
-
+                            backgroundColor: "white",
+                            opacity: "0.9",
                             color: "#489a8e",
                             borderColor: "#489a8e",
                           }}
@@ -268,9 +304,17 @@ export default function Dashboard() {
                 )}
               </Box>
             </Grid>
-            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               {" "}
-              <Box style={{ display: "flex", justifyContent: "space-between" }}>
+              <Box
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: "1rem",
+                  marginBottom: "1rem",
+                }}
+              >
                 <Box
                   style={{
                     display: "flex",
@@ -278,26 +322,6 @@ export default function Dashboard() {
                     alignItems: "center",
                   }}
                 >
-                  {/*                   <Link to="/new-project">
-                    <Button
-                      variant="outlined"
-                      style={{ borderColor: "#489a8e", color: "#489a8e" }}
-                    >
-                      Create Project
-                    </Button> </Link>*/}
-
-                  <Button
-                    variant="contained"
-                    onClick={handleNewObject}
-                    style={{
-                      borderColor: "#489a8e",
-                      backgroundColor: "#489a8e",
-                      color: "white",
-                      marginRight: "1rem",
-                    }}
-                  >
-                    <PostAddIcon />
-                  </Button>
                   <Link to="/all-objects">
                     <Button
                       variant="contained"
@@ -311,6 +335,23 @@ export default function Dashboard() {
                       <LibraryBooksIcon />
                     </Button>
                   </Link>
+                  {userProfile && userProfile.user.role === "Admin" ? (
+                    <Button
+                      variant="contained"
+                      onClick={handleNewObject}
+                      style={{
+                        borderColor: "#489a8e",
+                        backgroundColor: "#489a8e",
+                        color: "white",
+                        marginRight: "1rem",
+                      }}
+                    >
+                      <PostAddIcon />
+                    </Button>
+                  ) : (
+                    <></>
+                  )}
+
                   <Link to="/user-profile">
                     <Button
                       variant="contained"
@@ -335,6 +376,8 @@ export default function Dashboard() {
                     color: "white",
                     fontSize: "16px",
                     padding: "1rem",
+                    marginTop: "1rem",
+                    marginBottom: "1rem",
                   }}
                 />
               </Divider>
@@ -345,18 +388,38 @@ export default function Dashboard() {
                   display: "flex",
                   flexDirection: "row",
                   flexWrap: "wrap",
-                  justifyContent: "flex-start",
+                  justifyContent: "center",
                   marginBottom: "2rem",
                 }}
               >
                 {userProfile.user.object &&
+                userProfile.user.object.length === 0 ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+
+                      alignItems: "center",
+                      padding: "0.7rem",
+                      borderRadius: "1rem",
+                      backgroundColor: "white",
+                      opacity: "0.9",
+                    }}
+                  >
+                    <Typography variant="body2" color="text.secondary">
+                      No objects to display
+                    </Typography>
+                  </Box>
+                ) : (
                   userProfile.user.object.map((element, i) => {
                     return (
                       <div key={i}>
                         <Box className="dashboard-box-container">
                           <Link to={`/single-object/${element._id}`}>
                             <Box
-                              sx={{ display: "flex", flexDirection: "column" }}
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
                             >
                               <Box
                                 sx={{ display: "flex", flexDirection: "row" }}
@@ -410,7 +473,8 @@ export default function Dashboard() {
                         </Box>
                       </div>
                     );
-                  })}
+                  })
+                )}
               </Box>
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -422,6 +486,7 @@ export default function Dashboard() {
                     color: "white",
                     fontSize: "16px",
                     padding: "1rem",
+                    marginBottom: "1rem",
                   }}
                 />
               </Divider>
@@ -432,13 +497,23 @@ export default function Dashboard() {
                   display: "flex",
                   flexDirection: "row",
                   flexWrap: "wrap",
-                  justifyContent: "flex-start",
+                  justifyContent: "center",
                   marginBottom: "4rem",
                 }}
               >
                 {userProfile.user.bookmarks &&
                 userProfile.user.bookmarks.length === 0 ? (
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+
+                      alignItems: "center",
+                      padding: "0.7rem",
+                      borderRadius: "1rem",
+                      backgroundColor: "white",
+                      opacity: "0.9",
+                    }}
+                  >
                     <Typography variant="body2" color="text.secondary">
                       Click{" "}
                     </Typography>

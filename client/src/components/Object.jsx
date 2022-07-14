@@ -9,9 +9,10 @@ import {
   Typography,
   Drawer,
   Chip,
+  Avatar,
 } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
+import TwitterIcon from "@mui/icons-material/Twitter";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import SendIcon from "@mui/icons-material/Send";
 import BookmarkRemoveOutlinedIcon from "@mui/icons-material/BookmarkRemoveOutlined";
@@ -19,15 +20,19 @@ import "../App.css";
 import CommentItem from "./CommentItem";
 import { AuthContext } from "../context/AuthContext";
 import { useParams } from "react-router-dom";
+import ReturnButton from "./ReturnButton";
 
 function Object() {
   const [item, setItem] = useState();
   const [comment, setComment] = useState();
   const [show, setShow] = useState(false);
-
-  const { userProfile } = useContext(AuthContext);
-
+  const { userProfile, getProfileData } = useContext(AuthContext);
   const objectID = useParams();
+
+  const getTweetTitle = () => {
+    let tweetURL = `https://twitter.com/intent/tweet?text=${item.result.title}&via=docHub_app&hashtags=GoodToKnow`;
+    return tweetURL;
+  };
 
   const handleShow = () => {
     if (show) {
@@ -106,6 +111,8 @@ function Object() {
         requestOptions
       );
       const result = await response.json();
+      getObjectByID();
+      getProfileData();
       console.log(
         "SUCCESS: Post fetch request to create new bookmark successfull.",
         result
@@ -141,6 +148,8 @@ function Object() {
         requestOptions
       );
       const result = await response.json();
+      getObjectByID();
+      getProfileData();
       console.log("Result of deleting bookmark: ", result);
     } catch (error) {
       console.log(
@@ -148,6 +157,15 @@ function Object() {
         error
       );
     }
+  };
+
+  const getUniqueAuthors = () => {
+    let authors = [];
+    item.result.comments.map((element) => {
+      authors.push(element.user_id.avatar_url);
+    });
+    let uniqueAuthors = [...new Set(authors)];
+    return uniqueAuthors;
   };
 
   useEffect(() => {
@@ -297,8 +315,17 @@ function Object() {
                 )}
               </Box>
             </Drawer>{" "}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginRight: "1rem",
+              }}
+            >
+              <ReturnButton />
+            </Box>
             {item && (
-              <Box sx={{ marginLeft: "1rem" }}>
+              <Box sx={{ marginLeft: "1rem", marginTop: "0.5rem" }}>
                 <Typography variant="h6">{item.result.title}</Typography>
                 <Typography variant="subtitle2">
                   by {item.result.creator}, {item.result.archive} (
@@ -306,6 +333,28 @@ function Object() {
                 </Typography>
               </Box>
             )}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                marginRight: "1rem",
+                marginTop: "0.5rem",
+                alignItems: "center",
+                justifyContent: "flex-end",
+              }}
+            >
+              {item &&
+                getUniqueAuthors().map((element, i) => {
+                  return (
+                    <Avatar
+                      key={i}
+                      src={element}
+                      size="large"
+                      sx={{ marginLeft: "0.3rem" }}
+                    />
+                  );
+                })}
+            </Box>
             <Box
               sx={{
                 display: "flex",
@@ -346,10 +395,16 @@ function Object() {
                     );
                   })
                 )}
-
-                <IconButton>
-                  <PictureAsPdfOutlinedIcon />
-                </IconButton>
+                {item && (
+                  <a
+                    href={`https://twitter.com/intent/tweet?text=${item.result.title}%20by%20${item.result.creator}%20is%20a%20fascinating%20piece!%20Check%20it%20out!&via=docHub_app&hashtags=GoodToKnow`}
+                    target="blank"
+                  >
+                    <IconButton>
+                      <TwitterIcon />
+                    </IconButton>
+                  </a>
+                )}
               </Box>
             </Box>
             <Box>
@@ -363,6 +418,7 @@ function Object() {
                       element={element}
                       index={index}
                       item={item}
+                      setitem={setItem}
                       key={index}
                       retrieve={getObjectByID}
                     />

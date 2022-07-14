@@ -16,6 +16,7 @@ export const AuthContextProvider = (props) => {
   const isLoggedIn = () => {
     if (token) {
       setUserStatus(true);
+      navigate("/dashboard");
       console.log("=> User is logged in.");
     } else {
       setUserStatus(false);
@@ -31,32 +32,34 @@ export const AuthContextProvider = (props) => {
   };
 
   const getProfileData = async () => {
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${token}`);
-    const requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-    };
-    try {
-      const response = await fetch(
-        "http://localhost:5001/users/profile",
-        requestOptions
-      );
-      const profileData = await response.json();
-      setUserProfile(profileData);
-      console.log("Profile data: ", profileData);
-    } catch (error) {
-      console.log("Error fetching profile data: ", error);
-    }
+    if (token) {
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${token}`);
+      const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+      };
+      try {
+        const response = await fetch(
+          "http://localhost:5001/users/profile",
+          requestOptions
+        );
+        const profileData = await response.json();
+        setUserProfile(profileData);
+        isLoggedIn();
+        console.log("Profile data: ", profileData);
+      } catch (error) {
+        console.log("Error fetching profile data: ", error);
+      }
+    } else return;
   };
 
   useEffect(() => {
     getProfileData();
-  }, []);
-
-  useEffect(() => {
-    isLoggedIn();
   }, [userStatus]);
+
+  // ? Moved isLoggedIn to getProfileData function to avoid async shenanigans
+  useEffect(() => {}, [userStatus]);
 
   return (
     <AuthContext.Provider
@@ -67,6 +70,7 @@ export const AuthContextProvider = (props) => {
         setUserProfile,
         logOut,
         token,
+        getProfileData,
       }}
     >
       {props.children}

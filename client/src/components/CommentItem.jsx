@@ -12,13 +12,15 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
+import LocalPoliceOutlinedIcon from "@mui/icons-material/LocalPoliceOutlined";
 import { AuthContext } from "../context/AuthContext";
-
 import "../App.css";
 
 function CommentItem(props) {
   const element = props.element;
   const index = props.index;
+  const getObjectByID = props.retrieve;
   const [item, setItem] = useState(props.item);
   const [openSuccess, setOpenSuccess] = useState(false);
   const [openFailure, setOpenFailure] = useState(false);
@@ -101,6 +103,7 @@ function CommentItem(props) {
       );
       const result = await response.json();
       console.log("Result of deleting comment: ", result);
+      getObjectByID();
       setOpenSuccess(true);
     } catch (error) {
       console.log("ERROR: Unable to delete comment.", error);
@@ -108,9 +111,6 @@ function CommentItem(props) {
     }
   };
 
-  /*   useEffect(() => {
-    getObjectByID();
-  }, [reload]); */
   return (
     <div>
       <Modal open={openModal} onClose={handleCloseModal}>
@@ -176,22 +176,36 @@ function CommentItem(props) {
             }}
           >
             <Avatar
-              src={userProfile.user.avatar_url}
+              src={element.user_id.avatar_url}
               alt="user image"
               sx={{ marginRight: "0.5rem" }}
             />
             <Typography variant="caption" color="text.secondary">
               {element.author}
             </Typography>
+            {element.user_id.role === "Admin" && (
+              <LocalPoliceOutlinedIcon
+                fontSize="small"
+                sx={{ color: "gray", marginLeft: "0.5rem" }}
+              />
+            )}
+            {element.user_id.comments.length > 9 && (
+              <WorkspacePremiumIcon
+                fontSize="small"
+                sx={{ color: "gray", marginLeft: "0.5rem" }}
+              />
+            )}
           </Box>
-          <Box>
-            <IconButton onClick={() => setOpenModal(true)}>
-              <EditIcon fontSize="small" />
-            </IconButton>
-            <IconButton onClick={deleteComment}>
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </Box>
+          {userProfile.user._id === element.user_id._id && (
+            <Box>
+              <IconButton onClick={() => setOpenModal(true)}>
+                <EditIcon fontSize="small" />
+              </IconButton>
+              <IconButton onClick={deleteComment}>
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </Box>
+          )}
         </Box>
 
         <Typography variant="body2">{element.body}</Typography>
